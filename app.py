@@ -310,6 +310,13 @@ with tabs[1]:
                          f"Upper {confidence}% CI"]
         fc_df = fc_df.round(2)
         st.dataframe(fc_df, use_container_width=True)
+        csv_str = fc_df.reset_index().rename(columns={"index": "Date"}).to_csv(index=False)
+        st.download_button(
+            label="⬇️ Download Forecast CSV",
+            data=csv_str,
+            file_name=f"{commodity_name}_forecast.csv",
+            mime="text/csv",
+        )
 
 # ═══════════════════════════════════════════════════════════════════════════════
 #  TAB 2 — WEATHER OVERLAY
