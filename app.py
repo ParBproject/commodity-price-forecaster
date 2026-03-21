@@ -109,7 +109,11 @@ with st.sidebar:
 
     run_btn = st.button("🚀 Run Forecast", type="primary",
                         use_container_width=True)
-
+    
+    st.sidebar.caption("Data cached for 1 hour")
+    if st.sidebar.button("🔄 Clear Data Cache"):
+       st.cache_data.clear()
+       st.rerun()
 # ═══════════════════════════════════════════════════════════════════════════════
 #  HEADER
 # ═══════════════════════════════════════════════════════════════════════════════
