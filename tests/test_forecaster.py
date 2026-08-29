@@ -14,7 +14,8 @@ class TestComputeMetrics:
     def test_all_zeros_actual(self):
         # should not raise ZeroDivisionError
         result = compute_metrics([0, 0], [1, 2])
-        assert result is not None
+        assert result["MAE"] == 1.5
+        assert result["MAPE"] is None
 
     def test_single_element(self):
         result = compute_metrics([5], [5])
@@ -24,4 +25,15 @@ class TestComputeMetrics:
         result = compute_metrics([-5, -10], [-4, -9])
         assert result["MAE"] == 1.0
         # actual = [-5, -10], predicted = [-4, -9] → handles negatives
-        
+
+    def test_rejects_empty_inputs(self):
+        import pytest
+
+        with pytest.raises(ValueError, match="must not be empty"):
+            compute_metrics([], [])
+
+    def test_rejects_mismatched_shapes(self):
+        import pytest
+
+        with pytest.raises(ValueError, match="same shape"):
+            compute_metrics([1, 2], [1])
