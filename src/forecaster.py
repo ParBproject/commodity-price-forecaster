@@ -86,14 +86,14 @@ def fit_best_arima(
         # Fallback: statsmodels ARIMA(1,1,1)
         from statsmodels.tsa.arima.model import ARIMA as SM_ARIMA
 
-        sm_model = SM_ARIMA(train, order=(1, 1, 1)).fit(disp=False)
+        sm_model = SM_ARIMA(train, order=(1, 1, 1)).fit()
         order = (1, 1, 1)
         test_pred = sm_model.forecast(steps=len(test))
         metrics = compute_metrics(test.values, test_pred.values)
         metrics["AIC"] = sm_model.aic
 
         # Re-fit on all data
-        sm_model_full = SM_ARIMA(series, order=(1, 1, 1)).fit(disp=False)
+        sm_model_full = SM_ARIMA(series, order=(1, 1, 1)).fit()
         fc_res = sm_model_full.get_forecast(steps=horizon)
         fc = fc_res.predicted_mean.values
         ci = fc_res.conf_int(alpha=alpha)
@@ -234,18 +234,31 @@ def compute_metrics(
     -------
     dict with MAE, RMSE, MAPE keys.
     """
-    actual = np.asarray(actual).flatten()
-    predicted = np.asarray(predicted).flatten()
+    actual = np.asarray(actual, dtype=float).flatten()
+    predicted = np.asarray(predicted, dtype=float).flatten()
+
+    if actual.size == 0 or predicted.size == 0:
+        raise ValueError("actual and predicted must not be empty")
+    if actual.shape != predicted.shape:
+        raise ValueError("actual and predicted must have the same shape")
 
     mae = np.mean(np.abs(actual - predicted))
     rmse = np.sqrt(np.mean((actual - predicted) ** 2))
 
     # Avoid division by zero for MAPE
     nonzero = actual != 0
-    mape = np.mean(np.abs((actual[nonzero] - predicted[nonzero]) /
-                          actual[nonzero])) * 100
+    if np.any(nonzero):
+        mape = np.mean(np.abs((actual[nonzero] - predicted[nonzero]) /
+                              actual[nonzero])) * 100
+        mape_value = round(float(mape), 3)
+    else:
+        mape_value = None
 
-    return {"MAE": round(mae, 4), "RMSE": round(rmse, 4), "MAPE": round(mape, 3)}
+    return {
+        "MAE": round(float(mae), 4),
+        "RMSE": round(float(rmse), 4),
+        "MAPE": mape_value,
+    }
 
 
 # ─────────────────────────────────────────────────────────────────────────────
