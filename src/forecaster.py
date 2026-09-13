@@ -127,6 +127,23 @@ def fit_best_arima(
 # Prophet
 # ─────────────────────────────────────────────────────────────────────────────
 
+def select_prophet_components(forecast: pd.DataFrame) -> pd.DataFrame:
+    """Return Prophet components that are present in a forecast frame.
+
+    ``trend`` is always expected, while built-in ``yearly`` and ``weekly``
+    seasonalities are optional and disappear when disabled in the model.
+    """
+    required = ["ds", "trend"]
+    missing = [column for column in required if column not in forecast.columns]
+    if missing:
+        raise KeyError(f"Prophet forecast missing required columns: {missing}")
+
+    optional = [
+        column for column in ("yearly", "weekly") if column in forecast.columns
+    ]
+    return forecast[required + optional].copy()
+
+
 def fit_prophet(
     series: pd.Series,
     horizon: int = 12,
@@ -207,7 +224,7 @@ def fit_prophet(
         "forecast_df": forecast_df,
         "metrics": metrics,
         "model": model_full,
-        "components": forecast[["ds", "trend", "yearly", "weekly"]],
+        "components": select_prophet_components(forecast),
         "train": train_df,
         "test": test_df,
         "test_pred": test_pred,
