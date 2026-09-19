@@ -26,6 +26,58 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+st.markdown(
+    """
+    <style>
+    .stApp { background: #F8FAFC; }
+    .block-container {
+        max-width: 1450px;
+        padding-top: 1.4rem;
+        padding-bottom: 3rem;
+    }
+    div[data-testid="stMetric"] {
+        background: white;
+        border: 1px solid #E2E8F0;
+        border-radius: 15px;
+        padding: .85rem 1rem;
+        box-shadow: 0 4px 14px rgba(15,23,42,.035);
+    }
+    section[data-testid="stSidebar"] {
+        background: #F1F5F9;
+        border-right: 1px solid #E2E8F0;
+    }
+    .commodity-hero {
+        padding: 1.85rem 2.1rem;
+        border-radius: 22px;
+        background:
+            radial-gradient(circle at 88% 10%, rgba(245,158,11,.22), transparent 30%),
+            linear-gradient(135deg, #0F172A 0%, #1E3A5F 60%, #0F766E 130%);
+        color: white;
+        box-shadow: 0 18px 48px rgba(15,23,42,.14);
+        margin-bottom: 1rem;
+    }
+    .commodity-hero small {
+        color: #FDE68A;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+        font-weight: 750;
+    }
+    .commodity-hero h1 {
+        margin: .45rem 0 0;
+        font-size: 2.2rem;
+        letter-spacing: -.03em;
+    }
+    .commodity-hero p {
+        color: #DCE7F4;
+        margin: .75rem 0 0;
+        max-width: 880px;
+        line-height: 1.6;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # ── Module imports ─────────────────────────────────────────────────────────────
 from src.data_loader import fetch_commodity_prices, fetch_weather_data
 from src.forecaster import (
@@ -34,6 +86,7 @@ from src.forecaster import (
     compute_metrics,
     decompose_series,
 )
+from src.validation import rolling_origin_baseline_backtest
 from src.utils import (
     plot_forecast,
     plot_decomposition,
@@ -117,18 +170,27 @@ with st.sidebar:
 # ═══════════════════════════════════════════════════════════════════════════════
 #  HEADER
 # ═══════════════════════════════════════════════════════════════════════════════
-st.title(f"🛢️ Commodity Price Forecaster — {commodity_name}")
-st.caption(
-    "ARIMA · Prophet · Weather Overlays · Producer Risk Scoring  |  "
-    "⚠️ Educational use only"
+st.markdown(
+    f"""
+    <div class="commodity-hero">
+      <small>Commodity Forecasting Research</small>
+      <h1>{commodity_name} Research Lab</h1>
+      <p>
+        Statistical forecasting, rolling-origin benchmark validation, uncertainty,
+        weather context, decomposition, scenario shocks, and producer-risk analytics.
+      </p>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 tabs = st.tabs([
-    "🏠 Overview",
-    "📈 Forecast",
-    "🌤️ Weather Overlay",
-    "🔬 Decomposition",
-    "⚠️ Risk Dashboard",
+    "Market Overview",
+    "Forecast",
+    "Forecast Validation",
+    "Weather Context",
+    "Decomposition",
+    "Risk Dashboard",
 ])
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -323,9 +385,123 @@ with tabs[1]:
         )
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  TAB 2 — WEATHER OVERLAY
+#  TAB 2 — FORECAST VALIDATION
 # ═══════════════════════════════════════════════════════════════════════════════
 with tabs[2]:
+    st.subheader("Rolling-Origin Baseline Validation")
+    st.caption(
+        "Every benchmark forecast is generated using only observations available "
+        "before the forecast date. These simple models establish the performance "
+        "floor that ARIMA, Prophet, or an ensemble should beat."
+    )
+
+    initial_train_size = max(12, min(len(weekly) - 2, max(52, int(len(weekly) * 0.60))))
+    if initial_train_size >= len(weekly):
+        st.info("More weekly history is required for rolling-origin validation.")
+    else:
+        try:
+            validation_predictions, validation_table = (
+                rolling_origin_baseline_backtest(
+                    weekly,
+                    initial_train_size=initial_train_size,
+                    step=max(1, forecast_horizon // 4),
+                    season_length=52,
+                )
+            )
+
+            v1, v2, v3, v4 = st.columns(4)
+            best_row = validation_table.iloc[0]
+            v1.metric("Best baseline", str(best_row["Model"]))
+            v2.metric("Best MASE", f'{best_row["MASE"]:.3f}')
+            v3.metric("Best RMSE", f'{best_row["RMSE"]:.2f}')
+            v4.metric(
+                "Directional accuracy",
+                f'{best_row["Directional Accuracy"]:.1%}',
+            )
+
+            st.markdown("#### Baseline leaderboard")
+            st.dataframe(
+                validation_table.style.format(
+                    {
+                        "MAE": "{:.2f}",
+                        "RMSE": "{:.2f}",
+                        "MAPE (%)": "{:.2f}",
+                        "sMAPE (%)": "{:.2f}",
+                        "MASE": "{:.3f}",
+                        "Directional Accuracy": "{:.1%}",
+                    }
+                ),
+                hide_index=True,
+                use_container_width=True,
+            )
+
+            comparison = validation_predictions.pivot(
+                index="date",
+                columns="model",
+                values="predicted",
+            )
+            actual = (
+                validation_predictions[["date", "actual"]]
+                .drop_duplicates("date")
+                .set_index("date")
+            )
+            comparison = actual.join(comparison)
+            comparison.columns.name = None
+
+            validation_fig = go.Figure()
+            validation_fig.add_trace(
+                go.Scatter(
+                    x=comparison.index,
+                    y=comparison["actual"],
+                    name="Actual",
+                    line=dict(color="#0F172A", width=3),
+                )
+            )
+            palette = {
+                "Last Value": "#0F766E",
+                "Drift": "#2563EB",
+                "Seasonal Naive": "#D97706",
+            }
+            for model in ["Last Value", "Drift", "Seasonal Naive"]:
+                if model in comparison:
+                    validation_fig.add_trace(
+                        go.Scatter(
+                            x=comparison.index,
+                            y=comparison[model],
+                            name=model,
+                            line=dict(
+                                color=palette[model],
+                                width=1.6,
+                                dash="dot",
+                            ),
+                        )
+                    )
+            validation_fig.update_layout(
+                title="Rolling-Origin Baseline Forecasts",
+                height=450,
+                paper_bgcolor="white",
+                plot_bgcolor="white",
+                font=dict(color="#0F172A"),
+                xaxis=dict(title="", gridcolor="#E2E8F0"),
+                yaxis=dict(title="Price", gridcolor="#E2E8F0"),
+                legend=dict(orientation="h", y=-0.16),
+                margin=dict(l=55, r=25, t=65, b=70),
+            )
+            st.plotly_chart(validation_fig, use_container_width=True)
+
+            st.info(
+                "**Interpretation:** MASE below 1.0 means a forecast improves on "
+                "the in-sample one-step naïve error scale. Sophisticated models "
+                "should be compared with these baselines on a common evaluation design."
+            )
+        except ValueError as exc:
+            st.warning(f"Validation unavailable: {exc}")
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  TAB 3 — WEATHER OVERLAY
+# ═══════════════════════════════════════════════════════════════════════════════
+with tabs[3]:
     st.subheader(f"🌤️ Weather Overlay — {weather_region}")
 
     if weather_df is not None and not weather_df.empty:
@@ -386,7 +562,7 @@ with tabs[2]:
 # ═══════════════════════════════════════════════════════════════════════════════
 #  TAB 3 — DECOMPOSITION
 # ═══════════════════════════════════════════════════════════════════════════════
-with tabs[3]:
+with tabs[4]:
     st.subheader("🔬 Time-Series Decomposition")
     st.caption("Seasonal-Trend Decomposition using LOESS (STL)")
 
@@ -417,7 +593,7 @@ with tabs[3]:
 # ═══════════════════════════════════════════════════════════════════════════════
 #  TAB 4 — RISK DASHBOARD
 # ═══════════════════════════════════════════════════════════════════════════════
-with tabs[4]:
+with tabs[5]:
     st.subheader("⚠️ Producer & Supplier Risk Dashboard")
     st.caption(
         "Risk scores are derived from price volatility, drawdown history, "
