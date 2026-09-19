@@ -41,6 +41,25 @@ It asks:
 
 ## Forecasting workflow
 
+### Forecasting architecture
+
+```mermaid
+flowchart LR
+    A[Commodity Futures Prices] --> B[Weekly Time Series]
+    B --> C[Naive / Drift / Seasonal Baselines]
+    B --> D[ARIMA / SARIMAX]
+    B --> E[Prophet]
+    C --> F[Rolling-Origin Validation]
+    D --> G[Forecast + Intervals]
+    E --> G
+    H[Weather Data] --> I[Context Analysis]
+    F --> J[Research Dashboard]
+    G --> J
+    I --> J
+    J --> K[Scenario & Producer-Risk Views]
+```
+
+
 ```text
 Historical commodity futures prices
         ↓
