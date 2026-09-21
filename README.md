@@ -1,5 +1,13 @@
 # Commodity Price Forecaster
 
+## For a data analyst application
+
+**Supporting forecasting piece.** Useful if the posting mentions time series. Lead with uncertainty and the decomposition, not with a promise of the price. The dashboard screenshots are the surface to open.
+
+<p align="center"><img src="assets/screenshots/01_overview.png" alt="Commodity market overview" width="100%"></p>
+<p align="center"><img src="assets/screenshots/02_forecast.png" alt="Forecast comparison" width="100%"></p>
+<p align="center"><img src="assets/screenshots/05_risk_dashboard.png" alt="Producer risk dashboard" width="100%"></p>
+
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)](requirements.txt)
 [![Streamlit](https://img.shields.io/badge/Streamlit-Forecasting_Dashboard-FF4B4B?logo=streamlit&logoColor=white)](app.py)
 [![Tests](https://img.shields.io/badge/Tests-Pytest-0A9EDC?logo=pytest&logoColor=white)](tests/test_forecaster.py)
