@@ -10,6 +10,10 @@ A decision-oriented time-series forecasting project for **energy, metals, and ag
 
 The project is designed to demonstrate both **Quantitative Specialist** and **Data Analyst** skills: time-series modeling, benchmark design, out-of-sample evaluation, external-data integration, risk communication, visualization, and reproducible testing.
 
+## For a data analyst application
+
+**Supporting forecasting piece.** Useful if the posting mentions time series. Lead with uncertainty and the decomposition, not with a promise of the price. The dashboard screenshots are the surface to open.
+
 ## Employer snapshot
 
 | Capability | Evidence |
