@@ -86,6 +86,7 @@ from src.forecaster import (
     compute_metrics,
     decompose_series,
 )
+from src.formatting import format_directional_accuracy, format_mape
 from src.validation import rolling_origin_baseline_backtest
 from src.utils import (
     plot_forecast,
@@ -93,7 +94,6 @@ from src.utils import (
     plot_weather_overlay,
     risk_heatmap,
     compute_risk_scores,
-    format_mape,
 )
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -417,19 +417,22 @@ with tabs[2]:
             v3.metric("Best RMSE", f'{best_row["RMSE"]:.2f}')
             v4.metric(
                 "Directional accuracy",
-                f'{best_row["Directional Accuracy"]:.1%}',
+                format_directional_accuracy(best_row["Directional Accuracy"]),
             )
 
             st.markdown("#### Baseline leaderboard")
+            display_table = validation_table.copy()
+            display_table["Directional Accuracy"] = display_table[
+                "Directional Accuracy"
+            ].map(format_directional_accuracy)
             st.dataframe(
-                validation_table.style.format(
+                display_table.style.format(
                     {
                         "MAE": "{:.2f}",
                         "RMSE": "{:.2f}",
                         "MAPE (%)": "{:.2f}",
                         "sMAPE (%)": "{:.2f}",
                         "MASE": "{:.3f}",
-                        "Directional Accuracy": "{:.1%}",
                     }
                 ),
                 hide_index=True,

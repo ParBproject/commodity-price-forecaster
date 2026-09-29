@@ -111,7 +111,7 @@ The benchmark leaderboard reports:
 - **MAPE** — percentage error where actual prices are non-zero;
 - **sMAPE** — symmetric percentage error;
 - **MASE** — error scaled by the in-sample one-step naïve error;
-- **Directional Accuracy** — whether the predicted and realized weekly moves share the same sign.
+- **Directional Accuracy** — whether the predicted and realized weekly moves share the same sign. A flat forecast never calls a direction, so its directional accuracy is reported as n/a.
 
 A particularly useful interpretation is:
 

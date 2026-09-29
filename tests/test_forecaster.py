@@ -2,7 +2,7 @@ import pandas as pd
 import pytest
 
 from src.forecaster import compute_metrics, select_prophet_components
-from src.utils import format_mape
+from src.formatting import format_mape
 
 
 class TestComputeMetrics:

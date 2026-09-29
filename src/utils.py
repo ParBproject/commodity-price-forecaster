@@ -12,23 +12,6 @@ from plotly.subplots import make_subplots
 from typing import Optional
 
 
-def format_mape(value: float | None, digits: int = 1) -> str:
-    """Format MAPE for display.
-
-    ``compute_metrics`` returns ``None`` when every actual value is zero,
-    because percentage error is undefined. Show that case as ``n/a``.
-    """
-    if value is None:
-        return "n/a"
-    try:
-        number = float(value)
-    except (TypeError, ValueError):
-        return "n/a"
-    if not np.isfinite(number):
-        return "n/a"
-    return f"{number:.{digits}f}%"
-
-
 # ─────────────────────────────────────────────────────────────────────────────
 # Forecast Chart
 # ─────────────────────────────────────────────────────────────────────────────
