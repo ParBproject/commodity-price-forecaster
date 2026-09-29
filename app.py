@@ -93,6 +93,7 @@ from src.utils import (
     plot_weather_overlay,
     risk_heatmap,
     compute_risk_scores,
+    format_mape,
 )
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -339,7 +340,7 @@ with tabs[1]:
         c1, c2, c3, c4 = st.columns(4)
         c1.metric("ARIMA MAE", f"{m['MAE']:.2f}")
         c2.metric("ARIMA RMSE", f"{m['RMSE']:.2f}")
-        c3.metric("ARIMA MAPE", f"{m['MAPE']:.1f}%")
+        c3.metric("ARIMA MAPE", format_mape(m["MAPE"]))
         c4.metric("ARIMA AIC", f"{m.get('AIC', 0):.1f}")
 
     if prophet_result:
@@ -347,7 +348,7 @@ with tabs[1]:
         c1, c2, c3 = st.columns(3)
         c1.metric("Prophet MAE", f"{m['MAE']:.2f}")
         c2.metric("Prophet RMSE", f"{m['RMSE']:.2f}")
-        c3.metric("Prophet MAPE", f"{m['MAPE']:.1f}%")
+        c3.metric("Prophet MAPE", format_mape(m["MAPE"]))
 
     st.markdown("---")
 

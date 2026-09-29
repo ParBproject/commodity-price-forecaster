@@ -2,6 +2,7 @@ import pandas as pd
 import pytest
 
 from src.forecaster import compute_metrics, select_prophet_components
+from src.utils import format_mape
 
 
 class TestComputeMetrics:
@@ -20,6 +21,7 @@ class TestComputeMetrics:
         result = compute_metrics([0, 0], [1, 2])
         assert result["MAE"] == 1.5
         assert result["MAPE"] is None
+        assert format_mape(result["MAPE"]) == "n/a"
 
     def test_single_element(self):
         result = compute_metrics([5], [5])
@@ -37,6 +39,19 @@ class TestComputeMetrics:
     def test_rejects_mismatched_shapes(self):
         with pytest.raises(ValueError, match="same shape"):
             compute_metrics([1, 2], [1])
+
+
+@pytest.mark.parametrize(
+    "value,expected",
+    [
+        (None, "n/a"),
+        (float("nan"), "n/a"),
+        (0, "0.0%"),
+        (12.34, "12.3%"),
+    ],
+)
+def test_format_mape_handles_missing_and_numeric_values(value, expected):
+    assert format_mape(value) == expected
 
 
 @pytest.mark.parametrize(
