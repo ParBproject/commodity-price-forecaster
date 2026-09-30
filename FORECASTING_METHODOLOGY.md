@@ -99,6 +99,8 @@ MASE > 1  → worse than the naïve error scale
 
 The framework also evaluates whether the predicted movement from the prior actual observation has the same sign as the realized movement.
 
+A flat forecast predicts no move, so it makes no directional call. When every forecast is flat, or when the prior observation is missing, directional accuracy is undefined and displayed as n/a rather than 0%.
+
 ## Weather context
 
 Weather variables come from Open-Meteo and are used as contextual analysis rather than proof of causality.

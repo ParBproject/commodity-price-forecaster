@@ -91,6 +91,7 @@ from src.forecaster import (
     apply_price_scenario,
     forecast_export_frame,
 )
+from src.formatting import format_directional_accuracy, format_mape
 from src.market import trailing_high_low, weekly_last, weather_price_frame
 from src.validation import rolling_origin_baseline_backtest
 from src.utils import (
@@ -378,7 +379,7 @@ with tabs[1]:
         c1, c2, c3, c4 = st.columns(4)
         c1.metric("ARIMA MAE", f"{m['MAE']:.2f}")
         c2.metric("ARIMA RMSE", f"{m['RMSE']:.2f}")
-        c3.metric("ARIMA MAPE", f"{m['MAPE']:.1f}%")
+        c3.metric("ARIMA MAPE", format_mape(m["MAPE"]))
         c4.metric("ARIMA AIC", f"{m.get('AIC', 0):.1f}")
 
     if prophet_result:
@@ -386,7 +387,7 @@ with tabs[1]:
         c1, c2, c3 = st.columns(3)
         c1.metric("Prophet MAE", f"{m['MAE']:.2f}")
         c2.metric("Prophet RMSE", f"{m['RMSE']:.2f}")
-        c3.metric("Prophet MAPE", f"{m['MAPE']:.1f}%")
+        c3.metric("Prophet MAPE", format_mape(m["MAPE"]))
 
     st.caption(
         "Holdout score: one multi-step forecast from a single origin at 85% "
@@ -464,19 +465,22 @@ with tabs[2]:
             v3.metric("Best RMSE", f'{best_row["RMSE"]:.2f}')
             v4.metric(
                 "Directional accuracy",
-                f'{best_row["Directional Accuracy"]:.1%}',
+                format_directional_accuracy(best_row["Directional Accuracy"]),
             )
 
             st.markdown("#### Baseline leaderboard")
+            display_table = validation_table.copy()
+            display_table["Directional Accuracy"] = display_table[
+                "Directional Accuracy"
+            ].map(format_directional_accuracy)
             st.dataframe(
-                validation_table.style.format(
+                display_table.style.format(
                     {
                         "MAE": "{:.2f}",
                         "RMSE": "{:.2f}",
                         "MAPE (%)": "{:.2f}",
                         "sMAPE (%)": "{:.2f}",
                         "MASE": "{:.3f}",
-                        "Directional Accuracy": "{:.1%}",
                     }
                 ),
                 hide_index=True,
