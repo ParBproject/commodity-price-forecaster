@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Commodity Price Forecaster · Rolling-origin leaderboard</title>
+<meta name="description" content="Walk-forward leaderboard of naive, drift, seasonal-naive, ARIMA and Prophet forecasts on nine commodity futures.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Crect width=%2716%27 height=%2716%27 rx=%273%27 fill=%27%2310B981%27/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="wrap">
+  <nav class="top">
+    <a class="brand" href="https://parbproject.github.io/">ParBproject</a>
+    <a href="https://github.com/ParBproject/commodity-price-forecaster">GitHub repo</a>
+  </nav>
+  <h1>Commodity Price Forecaster</h1>
+  <p class="lede">Rolling-origin, one-step-ahead weekly forecasts for nine commodity futures. Every model is refit at each origin on data strictly before the forecast week and scored with MAE, sMAPE and MASE.</p>
+  <div class="cards" id="cards"></div>
+</header>
+
+<main class="wrap">
+  <section>
+    <h2>Leaderboard <span class="muted">(average across commodities)</span></h2>
+    <p id="verdict" class="verdict"></p>
+    <div class="table-scroll"><table id="avg-table"></table></div>
+  </section>
+
+  <section>
+    <h2>MASE by commodity</h2>
+    <p class="muted small">Lower is better. The best model in each row is highlighted.</p>
+    <div class="table-scroll"><table id="commodity-table"></table></div>
+  </section>
+
+  <section>
+    <h2>Forecast vs actual</h2>
+    <div class="controls">
+      <label for="commodity">Commodity</label>
+      <select id="commodity"></select>
+      <label for="model">Model</label>
+      <select id="model"></select>
+    </div>
+    <div id="chart" class="chart" role="img" aria-label="Forecast versus actual chart"></div>
+    <div class="legend"><span class="sw actual"></span>Actual <span class="sw model"></span><span id="legend-model">Model</span> <span class="sw snaive"></span>Seasonal naive</div>
+    <p id="chart-stats" class="muted small"></p>
+  </section>
+
+  <section>
+    <h2>Method</h2>
+    <ul class="method" id="method"></ul>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p id="source"></p>
+  <p><a href="https://github.com/ParBproject/commodity-price-forecaster">Source on GitHub</a> · <a href="https://parbproject.github.io/">parbproject.github.io</a> · <a href="leaderboard.json">leaderboard.json</a></p>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>
