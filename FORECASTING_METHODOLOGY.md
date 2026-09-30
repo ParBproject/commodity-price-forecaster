@@ -18,7 +18,8 @@ Weekly data reduces day-to-day noise and aligns naturally with seasonal and prod
 
 The application supports:
 
-- Auto-ARIMA / SARIMAX;
+- Auto-ARIMA, seasonal only when the training sample is long enough for the seasonal period, with an ARIMA(1, 1, 1) fallback;
+- no exogenous regressors (this is not a SARIMAX-with-X model);
 - Prophet;
 - an ensemble view of the two model families.
 
@@ -60,6 +61,12 @@ For each forecast date:
 
 No future observation is used to create an earlier forecast.
 
+The interactive leaderboard scores every remaining week. The forecast-horizon control does not change which weeks are scored.
+
+## Forecast-tab holdout
+
+The errors shown next to an ARIMA or Prophet path are a separate experiment: one multi-step forecast from the origin at 85% of the sample. The plotted path is a refit on the full sample. That refit does not change the holdout score. The score is not a one-step rolling-origin result and should not be read as comparable to the baseline leaderboard.
+
 ## Evaluation metrics
 
 ### MAE
@@ -96,13 +103,13 @@ The framework also evaluates whether the predicted movement from the prior actua
 
 Weather variables come from Open-Meteo and are used as contextual analysis rather than proof of causality.
 
-Correlation between weather variables and commodity prices should not be interpreted as a causal estimate.
+The displayed association uses weekly price returns and same-week weather on exact shared dates. Neighboring weeks are not matched in, and price levels are not correlated. This is not a lagged predictive feature and it is not a causal estimate.
 
 ## Scenario controls
 
 Supply, demand, and weather controls are explicit scenario multipliers.
 
-They are sensitivity-analysis assumptions, not estimated probabilities or causal structural models.
+They are sensitivity-analysis assumptions, not estimated probabilities or causal structural models. A shock scales the forecast path after estimation. It does not rescale the history the model was fit on, and it does not change the holdout score.
 
 ## Model limitations
 
@@ -112,7 +119,8 @@ They are sensitivity-analysis assumptions, not estimated probabilities or causal
 - repeated model selection on one evaluation period can overfit;
 - weather relevance differs materially by commodity and producing region;
 - Yahoo Finance and Open-Meteo data can be revised or unavailable;
-- baseline validation does not by itself prove that a complex model has stable economic value.
+- baseline validation does not by itself prove that a complex model has stable economic value;
+- producer rows share the commodity's volatility, drawdown, and trend scores; the geopolitical column is a deterministic illustrative prior, not estimated country risk.
 
 ## Production extensions
 

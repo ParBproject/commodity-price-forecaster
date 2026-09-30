@@ -19,14 +19,14 @@ The project is designed to demonstrate both **Quantitative Specialist** and **Da
 | Capability | Evidence |
 |---|---|
 | Real financial data | Commodity futures histories via Yahoo Finance |
-| Forecasting | Auto-ARIMA / SARIMAX and Prophet |
+| Forecasting | Auto-ARIMA (seasonal only when the sample is long enough) and Prophet. No exogenous regressors. |
 | Baselines | Last-value, drift, and seasonal-naïve forecasts |
 | Validation | Rolling-origin one-step evaluation with no future leakage |
 | Forecast metrics | MAE, RMSE, MAPE, sMAPE, MASE, directional accuracy |
 | Seasonality | Weekly resampling and STL decomposition |
 | External context | Open-Meteo weather data for producing regions |
 | Scenario analysis | Explicit supply, demand, and weather multipliers |
-| Risk communication | Uncertainty intervals and producer-risk views |
+| Risk communication | Uncertainty intervals and an illustrative producer-risk view |
 | Engineering | Modular Python, tests, CI on Python 3.10/3.12 |
 | Reporting | Professional Streamlit research dashboard |
 
@@ -51,7 +51,7 @@ It asks:
 flowchart LR
     A[Commodity Futures Prices] --> B[Weekly Time Series]
     B --> C[Naive / Drift / Seasonal Baselines]
-    B --> D[ARIMA / SARIMAX]
+    B --> D[ARIMA]
     B --> E[Prophet]
     C --> F[Rolling-Origin Validation]
     D --> G[Forecast + Intervals]
@@ -116,6 +116,8 @@ The benchmark leaderboard reports:
 - **sMAPE** — symmetric percentage error;
 - **MASE** — error scaled by the in-sample one-step naïve error;
 - **Directional Accuracy** — whether the predicted and realized weekly moves share the same sign.
+
+The Forecast tab score is a different experiment from this leaderboard. It is one multi-step forecast from a single origin at 85% of the sample. The model is then refit on the full sample for the path that is plotted. Those two numbers should not be compared as if they came from the same design.
 
 A particularly useful interpretation is:
 
@@ -189,7 +191,7 @@ The application can contextualize price history with variables including:
 - maximum wind speed;
 - evapotranspiration.
 
-Weather-price correlation is presented as descriptive context. It is **not** presented as proof of causality.
+The dashboard associates **weekly price returns** with same-week weather on exact shared dates. Price levels are not correlated, because a shared trend is not a relationship. The result is descriptive context. It is **not** a lagged model feature and it is **not** evidence of causality.
 
 ## Scenario analysis
 
@@ -199,7 +201,7 @@ The dashboard exposes explicit controls for:
 - demand shock;
 - weather-impact multiplier.
 
-These are sensitivity-analysis assumptions rather than estimated event probabilities.
+These are sensitivity-analysis assumptions rather than estimated event probabilities. They scale the published forecast path after the model is fit. They do not rewrite history, and they do not enter the holdout score.
 
 Keeping scenario assumptions visible prevents the output from appearing more certain than the underlying model.
 
@@ -235,7 +237,7 @@ cd commodity-price-forecaster
 python -m venv .venv
 source .venv/bin/activate
 
-python -m pip install -r requirements.txt
+python -m pip install -r requirements.txt -r requirements-dev.txt
 streamlit run app.py
 ```
 
@@ -257,13 +259,18 @@ Automated tests cover:
 - seasonal-naïve cycle alignment;
 - MASE scaling;
 - rolling-origin chronology;
-- bounded directional accuracy.
+- bounded directional accuracy;
+- pinned rolling-origin errors and a check that each score uses only its training prefix;
+- a trailing 52-week high and low, separate from the full-sample range;
+- causal forecast features and lagged weather;
+- Hyndman seasonal and trend strength;
+- an ARIMA(1, 1, 1) holdout that is scored before the full-sample refit.
 
 GitHub Actions runs linting, source compilation, the regression suite, and validation-module import checks on Python **3.10 and 3.12**.
 
 ## Skills demonstrated
 
-**Time-series analytics:** ARIMA/SARIMAX, Prophet, decomposition, seasonality, rolling-origin validation.
+**Time-series analytics:** ARIMA, Prophet, decomposition, seasonality, rolling-origin validation.
 
 **Data analysis:** pandas, NumPy, descriptive statistics, error metrics, weather integration, correlation analysis.
 
