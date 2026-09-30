@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
+from src.formatting import format_directional_accuracy
 from src.validation import (
     drift_forecast,
     forecast_metrics,
@@ -63,6 +64,36 @@ def test_rolling_origin_never_uses_future_data(weekly_series):
     }
     assert predictions["date"].min() == weekly_series.index[52]
     assert (leaderboard["Forecasts"] > 0).all()
+
+
+def test_flat_forecast_directional_accuracy_is_not_applicable():
+    """A forecast that never calls a direction is undefined, not 0%."""
+    metrics = forecast_metrics(
+        actual=[12.0, 9.0, 15.0],
+        predicted=[10.0, 12.0, 9.0],
+        insample=[8.0, 9.0, 10.0],
+        previous_actual=[10.0, 12.0, 9.0],
+    )
+    assert np.isnan(metrics.directional_accuracy)
+    assert format_directional_accuracy(metrics.directional_accuracy) == "n/a"
+    assert format_directional_accuracy(None) == "n/a"
+
+
+def test_last_value_baseline_does_not_report_zero_directional_accuracy():
+    index = pd.date_range("2023-01-01", periods=12, freq="W")
+    series = pd.Series(np.linspace(10.0, 21.0, len(index)), index=index)
+    _, leaderboard = rolling_origin_baseline_backtest(
+        series,
+        initial_train_size=5,
+        step=1,
+        season_length=52,
+    )
+    last_value = leaderboard.set_index("Model").loc["Last Value"]
+    assert np.isnan(last_value["Directional Accuracy"])
+    assert format_directional_accuracy(last_value["Directional Accuracy"]) == "n/a"
+    drift = leaderboard.set_index("Model").loc["Drift"]
+    assert np.isfinite(drift["Directional Accuracy"])
+    assert format_directional_accuracy(drift["Directional Accuracy"]) != "n/a"
 
 
 def test_rolling_origin_pins_known_errors_and_uses_only_the_prefix():

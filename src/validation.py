@@ -147,9 +147,14 @@ def forecast_metrics(
             raise ValueError("previous_actual must contain only finite values")
         actual_direction = np.sign(actual_values - previous)
         predicted_direction = np.sign(predicted_values - previous)
-        directional_accuracy = float(
-            np.mean(actual_direction == predicted_direction)
-        )
+        # A flat forecast (predicted change of zero at every origin) never
+        # calls a direction. That is undefined accuracy, not a 0% hit rate.
+        if not np.any(predicted_direction != 0):
+            directional_accuracy = np.nan
+        else:
+            directional_accuracy = float(
+                np.mean(actual_direction == predicted_direction)
+            )
 
     return ForecastMetrics(
         mae=mae,

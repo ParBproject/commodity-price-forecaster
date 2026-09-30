@@ -8,11 +8,7 @@
 
 A decision-oriented time-series forecasting project for **energy, metals, and agricultural commodities** using real market prices, statistical forecasting, rolling-origin benchmark validation, uncertainty intervals, weather context, decomposition, and scenario analysis.
 
-The project is designed to demonstrate both **Quantitative Specialist** and **Data Analyst** skills: time-series modeling, benchmark design, out-of-sample evaluation, external-data integration, risk communication, visualization, and reproducible testing.
-
-## For a data analyst application
-
-**Supporting forecasting piece.** Useful if the posting mentions time series. Lead with uncertainty and the decomposition, not with a promise of the price. The dashboard screenshots are the surface to open.
+It is written for quantitative and data-analyst review: time-series modeling, benchmark design, out-of-sample evaluation, external-data integration, risk communication, visualization, and reproducible testing. Point forecasts are shown with uncertainty intervals and seasonal decomposition, so the result is a range and a structure rather than a single promised price.
 
 ## Employer snapshot
 
@@ -115,7 +111,7 @@ The benchmark leaderboard reports:
 - **MAPE** — percentage error where actual prices are non-zero;
 - **sMAPE** — symmetric percentage error;
 - **MASE** — error scaled by the in-sample one-step naïve error;
-- **Directional Accuracy** — whether the predicted and realized weekly moves share the same sign.
+- **Directional Accuracy** — whether the predicted and realized weekly moves share the same sign. A flat forecast never calls a direction, so its directional accuracy is reported as n/a.
 
 The Forecast tab score is a different experiment from this leaderboard. It is one multi-step forecast from a single origin at 85% of the sample. The model is then refit on the full sample for the path that is plotted. Those two numbers should not be compared as if they came from the same design.
 
@@ -150,6 +146,8 @@ Producer/supplier risk scoring and scenario-oriented interpretation.
 
 ## Dashboard preview
 
+These previews are the current Streamlit app on its default view: WTI crude oil, January 2020 through December 2024, US Midwest weather, and the ARIMA + Prophet ensemble.
+
 ### Market overview
 
 ![Commodity market overview](assets/screenshots/01_overview.png)
@@ -157,6 +155,10 @@ Producer/supplier risk scoring and scenario-oriented interpretation.
 ### Forecast comparison
 
 ![ARIMA and Prophet commodity forecast](assets/screenshots/02_forecast.png)
+
+### Forecast validation
+
+![Rolling-origin baseline validation](assets/screenshots/07_forecast_validation.png)
 
 ### Weather context
 
@@ -169,8 +171,6 @@ Producer/supplier risk scoring and scenario-oriented interpretation.
 ### Risk dashboard
 
 ![Commodity producer risk dashboard](assets/screenshots/05_risk_dashboard.png)
-
-The current application includes an additional rolling-origin validation workbench and updated professional styling; screenshots should be regenerated after deployment to reflect the latest interface.
 
 ## Supported markets
 
