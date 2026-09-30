@@ -7,10 +7,8 @@ Data retrieval for:
 """
 
 import pandas as pd
-import numpy as np
 import requests
 import streamlit as st
-from datetime import datetime
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -177,15 +175,6 @@ def simulate_weather_data(
     pd.DataFrame with columns: temperature_mean, precipitation_sum,
     windspeed_max, evapotranspiration.
     """
-    np.random.seed(seed)
-    dates = pd.date_range(start, end, freq=freq)
-    n = len(dates)
-    t = np.linspace(0, 4 * np.pi, n)
+    from src.market import simulate_weather_data as _simulate_weather_data
 
-    df = pd.DataFrame(index=dates)
-    df["temperature_mean"] = 15 + 12 * np.sin(t) + np.random.randn(n) * 3
-    df["precipitation_sum"] = np.abs(30 * (1 - np.cos(t)) + np.random.randn(n) * 10)
-    df["windspeed_max"] = 20 + 10 * np.abs(np.sin(t * 2)) + np.random.randn(n) * 5
-    df["evapotranspiration"] = np.abs(5 + 3 * np.sin(t) + np.random.randn(n))
-
-    return df
+    return _simulate_weather_data(start, end, freq=freq, seed=seed)

@@ -11,6 +11,8 @@ import plotly.express as px
 from plotly.subplots import make_subplots
 from typing import Optional
 
+from src.market import compute_risk_scores
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Forecast Chart
@@ -73,7 +75,7 @@ def plot_forecast(
                         else pd.RangeIndex(len(test_pred)))
             fig.add_trace(go.Scatter(
                 x=test_idx, y=test_pred,
-                name="ARIMA In-sample fit",
+                name="ARIMA holdout forecast",
                 line=dict(color="#EF553B", width=1, dash="dot"),
                 opacity=0.6,
             ))
@@ -204,18 +206,20 @@ def plot_weather_overlay(
         name="Price", line=dict(color="#636EFA", width=2),
     ), row=1, col=1)
 
+    # Exact dates only. method="nearest" can attach a later week to this week.
+    aligned_weather = weather_df.reindex(prices.index)
+
     # Temperature
-    if "temperature_mean" in weather_df.columns:
-        temp = weather_df["temperature_mean"].reindex(prices.index, method="nearest")
+    if "temperature_mean" in aligned_weather.columns:
+        temp = aligned_weather["temperature_mean"]
         fig.add_trace(go.Scatter(
             x=temp.index, y=temp.values,
             name="Temp (°C)", line=dict(color="orange", width=1.5),
         ), row=2, col=1)
 
     # Precipitation
-    if "precipitation_sum" in weather_df.columns:
-        precip = weather_df["precipitation_sum"].reindex(prices.index,
-                                                          method="nearest")
+    if "precipitation_sum" in aligned_weather.columns:
+        precip = aligned_weather["precipitation_sum"]
         fig.add_trace(go.Bar(
             x=precip.index, y=precip.values,
             name="Precip (mm)", marker_color="steelblue", opacity=0.7,
@@ -228,116 +232,6 @@ def plot_weather_overlay(
         title=f"{commodity_name} vs Weather — {region_name}",
     )
     return fig
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Risk Scoring
-# ─────────────────────────────────────────────────────────────────────────────
-
-# Simulated geopolitical risk scores by commodity type (0–100 scale)
-_GEO_RISK = {
-    "CL=F": 65, "BZ=F": 70, "NG=F": 55, "GC=F": 30, "SI=F": 25,
-    "ZC=F": 20, "ZW=F": 35, "ZS=F": 18, "HG=F": 40,
-}
-
-# Simulated major producing regions per commodity
-_PRODUCERS = {
-    "CL=F": ["Saudi Arabia", "USA", "Russia", "Iraq", "UAE"],
-    "BZ=F": ["Norway", "UK", "Nigeria", "Angola", "Libya"],
-    "NG=F": ["USA", "Russia", "Iran", "Qatar", "Canada"],
-    "GC=F": ["China", "Australia", "Russia", "USA", "Canada"],
-    "SI=F": ["Mexico", "Peru", "China", "Russia", "Poland"],
-    "ZC=F": ["USA", "China", "Brazil", "Argentina", "Ukraine"],
-    "ZW=F": ["China", "India", "Russia", "USA", "France"],
-    "ZS=F": ["USA", "Brazil", "Argentina", "China", "India"],
-    "HG=F": ["Chile", "Peru", "China", "DRC", "USA"],
-}
-
-
-def compute_risk_scores(
-    prices: pd.Series,
-    commodity_name: str,
-) -> pd.DataFrame:
-    """
-    Compute a multi-factor risk score table for major producing regions.
-
-    Factors:
-    - Price Volatility (35%): annualised vol from recent 52 weeks
-    - Max Drawdown (25%): normalised maximum drawdown
-    - Trend Instability (20%): frequency of MA crossovers in past year
-    - Geopolitical Proxy (20%): static scores by commodity + random region noise
-
-    Parameters
-    ----------
-    prices : pd.Series     Daily or weekly commodity prices.
-    commodity_name : str   Display name.
-
-    Returns
-    -------
-    pd.DataFrame with columns: Region, Vol Score, Drawdown Score,
-    Trend Score, Geo Score, Overall Risk Score.
-    """
-    weekly = prices.resample("W").last().dropna()
-    weekly_returns = weekly.pct_change().dropna()
-
-    # Recent 52-week window
-    recent = weekly_returns.iloc[-52:] if len(weekly_returns) >= 52 \
-        else weekly_returns
-
-    # Price-based metrics (same for all regions, derived from single commodity)
-    ann_vol = recent.std() * np.sqrt(52)
-    cum = (1 + recent).cumprod()
-    rolling_max = cum.cummax()
-    drawdown = ((cum - rolling_max) / rolling_max).min()  # most negative
-
-    # Trend instability (MA crossover frequency)
-    if len(weekly) >= 26:
-        ma4 = weekly.rolling(4).mean().dropna()
-        ma26 = weekly.rolling(26).mean().dropna()
-        common = ma4.index.intersection(ma26.index)
-        crosses = ((ma4.loc[common] > ma26.loc[common]).astype(int)
-                   .diff().abs().sum())
-        trend_instability = crosses / max(len(common), 1)
-    else:
-        trend_instability = 0.5
-
-    # Retrieve ticker from series name or use first match
-    ticker = prices.name if prices.name else "CL=F"
-    base_geo = _GEO_RISK.get(str(ticker), 50)
-    producers = _PRODUCERS.get(str(ticker), ["Producer A", "Producer B",
-                                              "Producer C", "Producer D",
-                                              "Producer E"])
-
-    np.random.seed(int(abs(hash(commodity_name)) % 10000))
-
-    rows = []
-    for i, region in enumerate(producers):
-        # Add region-specific noise
-        noise = np.random.uniform(-15, 15)
-        geo_score = float(np.clip(base_geo + noise, 0, 100))
-
-        vol_score = float(np.clip(ann_vol * 200, 0, 100))          # scale to 0-100
-        dd_score = float(np.clip(abs(drawdown) * 250, 0, 100))
-        trend_score = float(np.clip(trend_instability * 150, 0, 100))
-
-        overall = (
-            0.35 * vol_score +
-            0.25 * dd_score +
-            0.20 * trend_score +
-            0.20 * geo_score
-        )
-
-        rows.append({
-            "Region / Producer": region,
-            "Volatility Score": round(vol_score, 1),
-            "Drawdown Score": round(dd_score, 1),
-            "Trend Score": round(trend_score, 1),
-            "Geopolitical Score": round(geo_score, 1),
-            "Overall Risk Score": round(overall, 1),
-        })
-
-    df = pd.DataFrame(rows).sort_values("Overall Risk Score", ascending=False)
-    return df.reset_index(drop=True)
 
 
 def risk_heatmap(risk_table: pd.DataFrame) -> go.Figure:

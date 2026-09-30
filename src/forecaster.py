@@ -8,12 +8,171 @@ Time-series forecasting pipeline:
   - Forecast accuracy metrics (MAE, RMSE, MAPE)
 """
 
+from __future__ import annotations
+
+import warnings
+
 import numpy as np
 import pandas as pd
-import warnings
+
 warnings.filterwarnings("ignore")
 
-from typing import Optional
+MIN_FORECAST_OBSERVATIONS = 30
+
+
+def _prepare_price_series(series: pd.Series) -> pd.Series:
+    """Sort, drop non-finite values, and store timezone-naive timestamps."""
+    if not isinstance(series.index, pd.DatetimeIndex):
+        raise TypeError("series must have a DatetimeIndex")
+
+    prepared = pd.Series(series, copy=True).astype(float).sort_index()
+    if prepared.index.tz is not None:
+        prepared = prepared.tz_convert("UTC").tz_localize(None)
+        prepared.index = pd.DatetimeIndex(prepared.index)
+    prepared.index = pd.DatetimeIndex(prepared.index).normalize()
+    prepared = prepared[~prepared.index.duplicated(keep="last")]
+    prepared = prepared.replace([np.inf, -np.inf], np.nan).dropna()
+    if prepared.empty:
+        raise ValueError("series must contain at least one finite observation")
+    return prepared
+
+
+def chronological_split(
+    series: pd.Series,
+    train_fraction: float = 0.85,
+) -> tuple[pd.Series, pd.Series]:
+    """Prefix split. The test block is always the later observations."""
+    if not 0 < train_fraction < 1:
+        raise ValueError("train_fraction must be between 0 and 1")
+    train_size = int(len(series) * train_fraction)
+    if train_size < 1 or train_size >= len(series):
+        raise ValueError("series is too short for a chronological holdout")
+    return series.iloc[:train_size], series.iloc[train_size:]
+
+
+def future_forecast_index(
+    last_timestamp,
+    horizon: int,
+    freq: str = "W",
+) -> pd.DatetimeIndex:
+    """Weekly dates strictly after the last observation."""
+    if isinstance(horizon, bool) or not isinstance(horizon, (int, np.integer)):
+        raise TypeError("horizon must be a positive integer")
+    if horizon < 1:
+        raise ValueError("horizon must be at least 1")
+
+    last = pd.Timestamp(last_timestamp)
+    if last.tzinfo is not None:
+        last = last.tz_convert("UTC").tz_localize(None)
+    last = last.normalize()
+    offset = pd.tseries.frequencies.to_offset(freq)
+    return pd.date_range(start=last + offset, periods=int(horizon), freq=freq)
+
+
+def apply_price_scenario(
+    forecast_df: pd.DataFrame,
+    multiplier: float,
+) -> pd.DataFrame:
+    """Scale a forecast path. History and holdout scores stay untouched."""
+    if not np.isfinite(multiplier) or multiplier <= 0:
+        raise ValueError("scenario multiplier must be a positive finite number")
+    scaled = forecast_df.copy()
+    for column in ("forecast", "lower", "upper"):
+        if column in scaled.columns:
+            scaled[column] = scaled[column].astype(float) * float(multiplier)
+    return scaled.clip(lower=0)
+
+
+def forecast_export_frame(
+    arima_result: dict | None,
+    prophet_result: dict | None,
+    confidence: int,
+) -> pd.DataFrame | None:
+    """Point forecasts and intervals for every model that actually ran."""
+    frames: list[pd.DataFrame] = []
+    if arima_result is not None and "forecast_df" in arima_result:
+        arima = arima_result["forecast_df"][["forecast", "lower", "upper"]].copy()
+        arima.columns = [
+            "ARIMA forecast",
+            f"ARIMA lower {confidence}%",
+            f"ARIMA upper {confidence}%",
+        ]
+        frames.append(arima)
+    if prophet_result is not None and "forecast_df" in prophet_result:
+        prophet = prophet_result["forecast_df"][["forecast", "lower", "upper"]].copy()
+        prophet.columns = [
+            "Prophet forecast",
+            f"Prophet lower {confidence}%",
+            f"Prophet upper {confidence}%",
+        ]
+        frames.append(prophet)
+    if not frames:
+        return None
+
+    table = frames[0] if len(frames) == 1 else frames[0].join(frames[1], how="outer")
+    if {"ARIMA forecast", "Prophet forecast"}.issubset(table.columns):
+        table["Ensemble forecast"] = table[
+            ["ARIMA forecast", "Prophet forecast"]
+        ].mean(axis=1, skipna=False)
+    table.index.name = "Date"
+    return table.sort_index()
+
+
+def _forecast_frame(future_dates: pd.DatetimeIndex, forecast, conf) -> pd.DataFrame:
+    point = np.asarray(forecast, dtype=float).reshape(-1)
+    bounds = np.asarray(conf, dtype=float)
+    if bounds.shape != (len(point), 2):
+        raise ValueError("confidence bounds must have one lower and upper column")
+    return pd.DataFrame(
+        {"forecast": point, "lower": bounds[:, 0], "upper": bounds[:, 1]},
+        index=future_dates,
+    )
+
+
+def forecast_with_fixed_arima(
+    series: pd.Series,
+    horizon: int = 12,
+    alpha: float = 0.05,
+    order: tuple[int, int, int] = (1, 1, 1),
+) -> dict | None:
+    """Holdout score from ARIMA fit on the training prefix, then refit for the path.
+
+    Reported errors come from the training model only. The full-sample refit is
+    used for the forward path and is not fed back into the holdout score.
+    """
+    prepared = _prepare_price_series(series)
+    if len(prepared) < MIN_FORECAST_OBSERVATIONS:
+        return None
+    train, test = chronological_split(prepared)
+
+    try:
+        from statsmodels.tsa.arima.model import ARIMA as SM_ARIMA
+
+        holdout_model = SM_ARIMA(train, order=order).fit()
+        test_pred = np.asarray(holdout_model.forecast(steps=len(test)), dtype=float)
+        metrics = compute_metrics(test.to_numpy(), test_pred)
+        metrics["AIC"] = float(holdout_model.aic)
+
+        full_model = SM_ARIMA(prepared, order=order).fit()
+        forecast_result = full_model.get_forecast(steps=horizon)
+        point = np.asarray(forecast_result.predicted_mean, dtype=float)
+        bounds = np.asarray(forecast_result.conf_int(alpha=alpha), dtype=float)
+    except Exception:
+        return None
+
+    return {
+        "forecast_df": _forecast_frame(
+            future_forecast_index(prepared.index[-1], horizon),
+            point,
+            bounds,
+        ),
+        "metrics": metrics,
+        "model": full_model,
+        "order": order,
+        "train": train,
+        "test": test,
+        "test_pred": test_pred,
+    }
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -28,10 +187,13 @@ def fit_best_arima(
     m: int = 52,          # Weekly seasonality period (52 weeks = 1 year)
 ) -> dict | None:
     """
-    Fit the best ARIMA / SARIMAX model using pmdarima's auto_arima,
-    then forecast `horizon` steps ahead.
+    Fit an ARIMA model with pmdarima's auto_arima, then forecast `horizon`
+    steps ahead. Seasonal terms are used only when the training sample is
+    long enough. No exogenous regressors are passed.
 
-    Falls back to statsmodels ARIMA(1,1,1) if pmdarima is not installed.
+    Falls back to statsmodels ARIMA(1, 1, 1) when pmdarima is missing or
+    auto-selection fails. Returns None when the history is too short or both
+    fits fail. The returned ``selection`` key is ``"auto"`` or ``"fixed"``.
 
     Parameters
     ----------
@@ -49,12 +211,17 @@ def fit_best_arima(
         model       : fitted model object
         order       : (p,d,q) or (p,d,q)(P,D,Q)m tuple
     """
-    train_size = int(len(series) * 0.85)
-    train = series.iloc[:train_size]
-    test = series.iloc[train_size:]
+    try:
+        prepared = _prepare_price_series(series)
+    except (TypeError, ValueError):
+        return None
+    if len(prepared) < MIN_FORECAST_OBSERVATIONS:
+        return None
+    train, test = chronological_split(prepared)
 
     try:
         import pmdarima as pm
+
         model = pm.auto_arima(
             train,
             start_p=0, start_q=0,
@@ -70,57 +237,42 @@ def fit_best_arima(
             n_jobs=1,
         )
         order = model.order
-        fitted_model = model
-
-        # In-sample + test predictions for metrics
-        test_pred = model.predict(n_periods=len(test))
-        metrics = compute_metrics(test.values, test_pred)
+        # Multi-step holdout from the training origin only. update() below
+        # refits for the forward path and must not change these errors.
+        test_pred = np.asarray(model.predict(n_periods=len(test)), dtype=float)
+        metrics = compute_metrics(test.to_numpy(), test_pred)
         metrics["AIC"] = model.aic()
 
-        # Re-fit on all data for final forecast
         model.update(test)
-        fc, conf = model.predict(n_periods=horizon, return_conf_int=True,
-                                 alpha=alpha)
-
-    except ImportError:
-        # Fallback: statsmodels ARIMA(1,1,1)
-        from statsmodels.tsa.arima.model import ARIMA as SM_ARIMA
-
-        sm_model = SM_ARIMA(train, order=(1, 1, 1)).fit()
-        order = (1, 1, 1)
-        test_pred = sm_model.forecast(steps=len(test))
-        metrics = compute_metrics(test.values, test_pred.values)
-        metrics["AIC"] = sm_model.aic
-
-        # Re-fit on all data
-        sm_model_full = SM_ARIMA(series, order=(1, 1, 1)).fit()
-        fc_res = sm_model_full.get_forecast(steps=horizon)
-        fc = fc_res.predicted_mean.values
-        ci = fc_res.conf_int(alpha=alpha)
-        conf = ci.values
-        fitted_model = sm_model_full
-
-    # Build forecast DataFrame with future dates
-    last_date = series.index[-1]
-    future_dates = pd.date_range(
-        start=last_date + pd.tseries.frequencies.to_offset("W"),
-        periods=horizon,
-        freq="W",
-    )
-    forecast_df = pd.DataFrame(
-        {"forecast": fc, "lower": conf[:, 0], "upper": conf[:, 1]},
-        index=future_dates,
-    )
-
-    return {
-        "forecast_df": forecast_df,
-        "metrics": metrics,
-        "model": fitted_model,
-        "order": order,
-        "train": train,
-        "test": test,
-        "test_pred": test_pred if hasattr(test_pred, "__len__") else test_pred.values,
-    }
+        fc, conf = model.predict(
+            n_periods=horizon,
+            return_conf_int=True,
+            alpha=alpha,
+        )
+        forecast_df = _forecast_frame(
+            future_forecast_index(prepared.index[-1], horizon),
+            fc,
+            conf,
+        )
+        return {
+            "forecast_df": forecast_df,
+            "metrics": metrics,
+            "model": model,
+            "order": order,
+            "selection": "auto",
+            "train": train,
+            "test": test,
+            "test_pred": test_pred,
+        }
+    except Exception:
+        fallback = forecast_with_fixed_arima(
+            prepared,
+            horizon=horizon,
+            alpha=alpha,
+        )
+        if fallback is None:
+            return None
+        return {**fallback, "selection": "fixed"}
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -172,53 +324,58 @@ def fit_prophet(
         except ImportError:
             return None  # Prophet not installed
 
-    # Prophet expects columns: ds (datetime) and y (value)
-    df_prophet = pd.DataFrame({
-        "ds": series.index,
-        "y": series.values,
-    })
+    try:
+        prepared = _prepare_price_series(series)
+        if len(prepared) < MIN_FORECAST_OBSERVATIONS:
+            return None
+        train, test = chronological_split(prepared)
+        train_df = pd.DataFrame({"ds": train.index, "y": train.to_numpy()})
+        test_df = pd.DataFrame({"ds": test.index, "y": test.to_numpy()})
 
-    train_size = int(len(df_prophet) * 0.85)
-    train_df = df_prophet.iloc[:train_size]
-    test_df = df_prophet.iloc[train_size:]
+        model = Prophet(
+            interval_width=interval_width,
+            weekly_seasonality=weekly_seasonality,
+            yearly_seasonality=yearly_seasonality,
+            daily_seasonality=False,
+            uncertainty_samples=500,
+        )
+        model.fit(train_df)
 
-    model = Prophet(
-        interval_width=interval_width,
-        weekly_seasonality=weekly_seasonality,
-        yearly_seasonality=yearly_seasonality,
-        daily_seasonality=False,
-        uncertainty_samples=500,
-    )
-    model.fit(train_df)
+        # Score the actual holdout timestamps. A generated weekly calendar can
+        # drift off the sample when a week is missing, and positional scoring
+        # would then compare the wrong weeks.
+        test_forecast = model.predict(pd.DataFrame({"ds": test.index}))
+        predicted = (
+            test_forecast.assign(ds=pd.DatetimeIndex(test_forecast["ds"]).normalize())
+            .drop_duplicates("ds")
+            .set_index("ds")["yhat"]
+            .reindex(test.index)
+        )
+        if predicted.isna().any():
+            return None
+        test_pred = predicted.to_numpy(dtype=float)
+        metrics = compute_metrics(test.to_numpy(), test_pred)
 
-    # Test predictions
-    test_future = model.make_future_dataframe(
-        periods=len(test_df), freq="W", include_history=False
-    )
-    test_forecast = model.predict(test_future)
-    test_pred = test_forecast["yhat"].values
-    metrics = compute_metrics(test_df["y"].values, test_pred)
-
-    # Re-fit on all data
-    model_full = Prophet(
-        interval_width=interval_width,
-        weekly_seasonality=weekly_seasonality,
-        yearly_seasonality=yearly_seasonality,
-        daily_seasonality=False,
-    )
-    model_full.fit(df_prophet)
-    future = model_full.make_future_dataframe(periods=horizon, freq="W",
-                                               include_history=False)
-    forecast = model_full.predict(future)
-
-    forecast_df = forecast[["ds", "yhat", "yhat_lower", "yhat_upper"]].copy()
-    forecast_df = forecast_df.set_index("ds").rename(columns={
-        "yhat": "forecast",
-        "yhat_lower": "lower",
-        "yhat_upper": "upper",
-    })
-    # Clip negatives (prices can't be negative)
-    forecast_df = forecast_df.clip(lower=0)
+        model_full = Prophet(
+            interval_width=interval_width,
+            weekly_seasonality=weekly_seasonality,
+            yearly_seasonality=yearly_seasonality,
+            daily_seasonality=False,
+            uncertainty_samples=500,
+        )
+        model_full.fit(pd.DataFrame({"ds": prepared.index, "y": prepared.to_numpy()}))
+        future_dates = future_forecast_index(prepared.index[-1], horizon)
+        forecast = model_full.predict(pd.DataFrame({"ds": future_dates}))
+        forecast_df = forecast[["ds", "yhat", "yhat_lower", "yhat_upper"]].copy()
+        forecast_df["ds"] = pd.DatetimeIndex(forecast_df["ds"]).normalize()
+        forecast_df = forecast_df.set_index("ds").rename(columns={
+            "yhat": "forecast",
+            "yhat_lower": "lower",
+            "yhat_upper": "upper",
+        })
+        forecast_df = forecast_df.clip(lower=0)
+    except Exception:
+        return None
 
     return {
         "forecast_df": forecast_df,
@@ -319,6 +476,34 @@ def decompose_series(
             return None
 
 
+def _component_strength(component: np.ndarray, resid: np.ndarray) -> float | None:
+    """Hyndman strength: max(0, 1 - Var(resid) / Var(component + resid))."""
+    component_values = np.asarray(component, dtype=float).reshape(-1)
+    resid_values = np.asarray(resid, dtype=float).reshape(-1)
+    if component_values.shape != resid_values.shape:
+        raise ValueError("component and resid must have the same shape")
+    valid = np.isfinite(component_values) & np.isfinite(resid_values)
+    if int(valid.sum()) < 2:
+        return None
+    denominator = float(np.var(component_values[valid] + resid_values[valid], ddof=1))
+    if denominator <= 0:
+        return None
+    strength = 1.0 - float(np.var(resid_values[valid], ddof=1)) / denominator
+    return float(max(0.0, strength))
+
+
+def decomposition_strength(result: object) -> dict:
+    """Seasonal and trend strength in [0, 1].
+
+    This is not a ratio of standard deviations. A ratio of standard deviations
+    can exceed 1 and is not the share of variance associated with a component.
+    """
+    return {
+        "seasonal_strength": _component_strength(result.seasonal, result.resid),
+        "trend_strength": _component_strength(result.trend, result.resid),
+    }
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Feature Engineering
 # ─────────────────────────────────────────────────────────────────────────────
@@ -329,13 +514,11 @@ def create_features(
     weather_df: pd.DataFrame | None = None,
 ) -> pd.DataFrame:
     """
-    Engineer features for ML-based forecasting.
+    Engineer features for a supervised forecast of ``price`` at time t.
 
-    Includes:
-    - Lagged price values
-    - Rolling statistics (mean, std)
-    - Calendar features (week of year, month)
-    - Optional weather variables
+    ``price`` and ``log_price`` are the observation at t. Every other column
+    uses only information available before t: lags, completed returns, rolling
+    statistics through t-1, calendar fields, and weather lagged by one period.
 
     Parameters
     ----------
@@ -352,26 +535,33 @@ def create_features(
 
     df = pd.DataFrame({"price": series})
     df["log_price"] = np.log(series.clip(lower=1e-6))
+    history = series.shift(1)
 
-    # Lag features
+    # Lag features and returns that were complete before t.
     for lag in lags:
         df[f"lag_{lag}"] = series.shift(lag)
-        df[f"return_{lag}"] = series.pct_change(lag)
+        df[f"return_{lag}"] = series.pct_change(lag).shift(1)
 
-    # Rolling statistics
+    # Rolling statistics of prices known before t.
     for window in [4, 12, 26]:
-        df[f"roll_mean_{window}"] = series.rolling(window).mean()
-        df[f"roll_std_{window}"] = series.rolling(window).std()
+        df[f"roll_mean_{window}"] = history.rolling(window).mean()
+        df[f"roll_std_{window}"] = history.rolling(window).std()
 
-    # Calendar
+    # Calendar fields are known before the week's close.
     df["week_of_year"] = series.index.isocalendar().week.astype(int)
     df["month"] = series.index.month
     df["quarter"] = series.index.quarter
 
-    # Weather features
+    # Same-week weather is contemporaneous with the weekly close, so lag it
+    # by one week on the calendar rather than by row position.
     if weather_df is not None:
-        common_idx = df.index.intersection(weather_df.index)
-        for col in weather_df.columns:
-            df.loc[common_idx, f"weather_{col}"] = weather_df.loc[common_idx, col]
+        lagged_weather = weather_df.copy()
+        lagged_weather.index = pd.DatetimeIndex(lagged_weather.index)
+        if lagged_weather.index.tz is not None:
+            lagged_weather.index = lagged_weather.index.tz_convert("UTC").tz_localize(None)
+        lagged_weather = lagged_weather.shift(1, freq="W")
+        common_idx = df.index.intersection(lagged_weather.index)
+        for col in lagged_weather.columns:
+            df.loc[common_idx, f"weather_{col}"] = lagged_weather.loc[common_idx, col]
 
     return df.dropna()
