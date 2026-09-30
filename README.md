@@ -7,6 +7,7 @@
 [![CI](https://github.com/ParBproject/commodity-price-forecaster/actions/workflows/python-package-conda.yml/badge.svg)](https://github.com/ParBproject/commodity-price-forecaster/actions/workflows/python-package-conda.yml)
 
 **[Live demo →](https://parbproject.github.io/commodity-price-forecaster/)** interactive walk-forward leaderboard and forecast-vs-actual charts, built from the committed results file.
+The demo is published to the `gh-pages` branch from `site/` plus `results/leaderboard.json`.
 
 A decision-oriented time-series forecasting project for **energy, metals, and agricultural commodities** using real market prices, statistical forecasting, rolling-origin benchmark validation, uncertainty intervals, weather context, decomposition, and scenario analysis.
 
