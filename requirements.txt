@@ -8,3 +8,4 @@ statsmodels==0.14.5
 requests==2.32.5
 pmdarima==2.1.1
 prophet==1.1.7
+cmdstanpy==1.2.5  # prophet 1.1.7 cannot load its bundled CmdStan with cmdstanpy 1.3
