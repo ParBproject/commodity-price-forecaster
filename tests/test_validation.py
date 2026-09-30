@@ -96,6 +96,48 @@ def test_last_value_baseline_does_not_report_zero_directional_accuracy():
     assert format_directional_accuracy(drift["Directional Accuracy"]) != "n/a"
 
 
+def test_rolling_origin_pins_known_errors_and_uses_only_the_prefix():
+    index = pd.date_range("2024-01-07", periods=5, freq="W")
+    series = pd.Series([10.0, 12.0, 11.0, 13.0, 12.0], index=index)
+    predictions, leaderboard = rolling_origin_baseline_backtest(
+        series,
+        initial_train_size=3,
+        step=1,
+        season_length=2,
+    )
+    scores = leaderboard.set_index("Model")
+
+    assert scores.loc["Last Value", "MAE"] == pytest.approx(1.5)
+    assert scores.loc["Last Value", "RMSE"] == pytest.approx(np.sqrt(2.5))
+    assert scores.loc["Last Value", "MASE"] == pytest.approx(1.0)
+    assert scores.loc["Drift", "MAE"] == pytest.approx(1.75)
+    assert scores.loc["Drift", "MASE"] == pytest.approx(1.75 / 1.5)
+    assert scores.loc["Drift", "Directional Accuracy"] == pytest.approx(0.5)
+    assert scores.loc["Seasonal Naive", "MAE"] == pytest.approx(1.0)
+    assert scores.loc["Seasonal Naive", "MASE"] == pytest.approx(1.0 / 1.5)
+    assert scores.loc["Seasonal Naive", "Directional Accuracy"] == pytest.approx(1.0)
+
+    for timestamp, group in predictions.groupby("date"):
+        train = series.iloc[: series.index.get_loc(timestamp)]
+        got = group.set_index("model")["predicted"]
+        assert got["Last Value"] == pytest.approx(last_value_forecast(train, 1)[0])
+        assert got["Drift"] == pytest.approx(drift_forecast(train, 1)[0])
+        assert got["Seasonal Naive"] == pytest.approx(
+            seasonal_naive_forecast(train, 1, season_length=2)[0]
+        )
+        assert train.index.max() < timestamp
+
+
+def test_directional_accuracy_rejects_non_finite_previous_actual():
+    with pytest.raises(ValueError, match="finite"):
+        forecast_metrics(
+            actual=[1.0, 2.0],
+            predicted=[1.0, 2.0],
+            insample=[1.0, 2.0, 3.0],
+            previous_actual=[1.0, np.nan],
+        )
+
+
 def test_directional_accuracy_is_bounded(weekly_series):
     _, leaderboard = rolling_origin_baseline_backtest(
         weekly_series,

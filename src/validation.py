@@ -143,6 +143,8 @@ def forecast_metrics(
         previous = np.asarray(previous_actual, dtype=float).reshape(-1)
         if previous.shape != actual_values.shape:
             raise ValueError("previous_actual must match actual shape")
+        if not np.isfinite(previous).all():
+            raise ValueError("previous_actual must contain only finite values")
         actual_direction = np.sign(actual_values - previous)
         predicted_direction = np.sign(predicted_values - previous)
         # A flat forecast (predicted change of zero at every origin) never

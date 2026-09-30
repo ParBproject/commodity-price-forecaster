@@ -2,7 +2,7 @@
 Commodity Price Forecaster
 ==========================
 Interactive Streamlit dashboard for forecasting commodity prices using
-ARIMA/SARIMAX + Prophet, with weather data overlays, confidence intervals,
+ARIMA and Prophet, with weather data overlays, confidence intervals,
 and supplier/producer risk scoring.
 
 ⚠️ DISCLAIMER: For educational/simulation purposes only. Not financial advice.
@@ -12,7 +12,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
-import plotly.express as px
 from plotly.subplots import make_subplots
 import warnings
 
@@ -79,14 +78,21 @@ st.markdown(
 )
 
 # ── Module imports ─────────────────────────────────────────────────────────────
-from src.data_loader import fetch_commodity_prices, fetch_weather_data
+from src.data_loader import (
+    fetch_commodity_prices,
+    fetch_weather_data,
+    simulate_weather_data,
+)
 from src.forecaster import (
     fit_best_arima,
     fit_prophet,
-    compute_metrics,
     decompose_series,
+    decomposition_strength,
+    apply_price_scenario,
+    forecast_export_frame,
 )
 from src.formatting import format_directional_accuracy, format_mape
+from src.market import trailing_high_low, weekly_last, weather_price_frame
 from src.validation import rolling_origin_baseline_backtest
 from src.utils import (
     plot_forecast,
@@ -218,9 +224,9 @@ if not run_btn:
 
         | Model | Description |
         |-------|-------------|
-        | **Auto-ARIMA** | Automatically selects optimal (p,d,q)(P,D,Q) via AIC/BIC minimization using `pmdarima` |
-        | **Prophet** | Facebook Prophet — handles seasonality, holidays, and trend changepoints |
-        | **Ensemble** | Average of ARIMA and Prophet forecasts for reduced variance |
+        | **Auto-ARIMA** | Selects an ARIMA order by AIC on the training prefix when `pmdarima` is installed. Seasonal terms are included only when the history is long enough. Otherwise the fit falls back to ARIMA(1, 1, 1). No exogenous regressors are used. |
+        | **Prophet** | Prophet trend and seasonality with an uncertainty interval |
+        | **Ensemble** | Average of the ARIMA and Prophet paths when both models fit. The average is not a separately validated model. |
 
         ### Data Sources
         - **Commodity Prices**: Yahoo Finance via `yfinance` (futures contracts)
@@ -239,8 +245,9 @@ if prices is None or prices.empty:
     st.error("Could not fetch commodity data. Check your ticker and date range.")
     st.stop()
 
-# Weekly resample for cleaner forecasting
-weekly = prices.resample("W").last().dropna()
+# Regular weekly grid. Empty weeks keep their place and carry the last print
+# forward; backfilling would leak a later price into an earlier week.
+weekly = weekly_last(prices)
 returns = weekly.pct_change().dropna()
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -254,15 +261,16 @@ with tabs[0]:
     start_price = prices.iloc[0]
     total_return = (current_price / start_price - 1) * 100
     ann_vol = returns.std() * np.sqrt(52) * 100
-    max_val = prices.max()
-    min_val = prices.min()
+    trailing = trailing_high_low(prices, weeks=52)
+    high_label = "52-week High" if trailing["complete_window"] else "Sample High"
+    low_label = "52-week Low" if trailing["complete_window"] else "Sample Low"
 
     c1, c2, c3, c4, c5 = st.columns(5)
     c1.metric("Current Price", f"${current_price:.2f}")
     c2.metric("Total Return", f"{total_return:+.1f}%")
     c3.metric("Ann. Volatility", f"{ann_vol:.1f}%")
-    c4.metric("52-week High", f"${max_val:.2f}")
-    c5.metric("52-week Low", f"${min_val:.2f}")
+    c4.metric(high_label, f"${trailing['high']:.2f}")
+    c5.metric(low_label, f"${trailing['low']:.2f}")
 
     # Main price chart with volume
     fig_main = make_subplots(rows=2, cols=1, shared_xaxes=True,
@@ -311,13 +319,13 @@ with tabs[0]:
 with tabs[1]:
     st.subheader(f"🔮 {forecast_horizon}-Week Price Forecast")
 
-    # Apply scenario adjustments to weekly series
+    # Shocks scale the published forecast path only. Fitting and the holdout
+    # score stay on observed prices.
     scenario_multiplier = (
         (1 + supply_shock / 100) *
         (1 + demand_shock / 100) *
         weather_multiplier
     )
-    weekly_adj = weekly * scenario_multiplier if scenario_multiplier != 1.0 else weekly
 
     alpha = 1 - confidence / 100
     arima_result, prophet_result = None, None
@@ -325,18 +333,49 @@ with tabs[1]:
     if model_choice in ["Auto-ARIMA", "Both (Ensemble)"]:
         with st.spinner("Fitting Auto-ARIMA model…"):
             arima_result = fit_best_arima(
-                weekly_adj, forecast_horizon, alpha=alpha
+                weekly, forecast_horizon, alpha=alpha
+            )
+        if arima_result is None:
+            st.warning(
+                "Auto-ARIMA could not be fit on this sample. "
+                "A longer weekly history is required."
             )
 
     if model_choice in ["Prophet", "Both (Ensemble)"]:
         with st.spinner("Fitting Prophet model…"):
             prophet_result = fit_prophet(
-                weekly_adj, forecast_horizon, interval_width=confidence / 100
+                weekly, forecast_horizon, interval_width=confidence / 100
+            )
+        if prophet_result is None:
+            st.warning(
+                "Prophet could not be fit on this sample "
+                "(it may be unavailable, or the history may be too short)."
             )
 
-    # Metrics display
+    display_arima = arima_result
+    display_prophet = prophet_result
+    if scenario_multiplier != 1.0:
+        if arima_result is not None:
+            display_arima = {
+                **arima_result,
+                "forecast_df": apply_price_scenario(
+                    arima_result["forecast_df"], scenario_multiplier
+                ),
+            }
+        if prophet_result is not None:
+            display_prophet = {
+                **prophet_result,
+                "forecast_df": apply_price_scenario(
+                    prophet_result["forecast_df"], scenario_multiplier
+                ),
+            }
+
     if arima_result:
         m = arima_result["metrics"]
+        if arima_result.get("selection") == "fixed":
+            st.caption(
+                "Auto-ARIMA was unavailable, so this fit is ARIMA(1, 1, 1)."
+            )
         c1, c2, c3, c4 = st.columns(4)
         c1.metric("ARIMA MAE", f"{m['MAE']:.2f}")
         c2.metric("ARIMA RMSE", f"{m['RMSE']:.2f}")
@@ -350,11 +389,18 @@ with tabs[1]:
         c2.metric("Prophet RMSE", f"{m['RMSE']:.2f}")
         c3.metric("Prophet MAPE", format_mape(m["MAPE"]))
 
+    st.caption(
+        "Holdout score: one multi-step forecast from a single origin at 85% "
+        "of the sample, then the model is refit on the full sample for the "
+        "path below. These numbers are not the one-step rolling-origin "
+        "leaderboard, and the scenario sliders do not enter the score."
+    )
+
     st.markdown("---")
 
     # Forecast chart
     fig_fc = plot_forecast(
-        weekly_adj, arima_result, prophet_result, commodity_name,
+        weekly, display_arima, display_prophet, commodity_name,
         confidence_level=confidence,
     )
     st.plotly_chart(fig_fc, use_container_width=True)
@@ -362,7 +408,9 @@ with tabs[1]:
     # Scenario annotation
     if scenario_multiplier != 1.0:
         st.info(
-            f"⚡ Scenario applied: Supply {supply_shock:+}% | "
+            f"⚡ Scenario applied to the forecast path only "
+            f"(history and holdout scores stay on observed prices): "
+            f"Supply {supply_shock:+}% | "
             f"Demand {demand_shock:+}% | "
             f"Weather multiplier {weather_multiplier:.1f}x  →  "
             f"Net price adjustment: **{(scenario_multiplier - 1)*100:+.1f}%**"
@@ -370,14 +418,13 @@ with tabs[1]:
 
     # Forecast table
     st.subheader("📋 Forecast Values Table")
-    if arima_result:
-        fc_df = arima_result["forecast_df"].copy()
+    fc_df = forecast_export_frame(display_arima, display_prophet, confidence)
+    if fc_df is not None:
+        fc_df = fc_df.copy()
         fc_df.index = fc_df.index.strftime("%Y-%m-%d")
-        fc_df.columns = [f"Forecast ($)", f"Lower {confidence}% CI",
-                         f"Upper {confidence}% CI"]
         fc_df = fc_df.round(2)
         st.dataframe(fc_df, use_container_width=True)
-        csv_str = fc_df.reset_index().rename(columns={"index": "Date"}).to_csv(index=False)
+        csv_str = fc_df.reset_index().to_csv(index=False)
         st.download_button(
             label="⬇️ Download Forecast CSV",
             data=csv_str,
@@ -391,9 +438,10 @@ with tabs[1]:
 with tabs[2]:
     st.subheader("Rolling-Origin Baseline Validation")
     st.caption(
-        "Every benchmark forecast is generated using only observations available "
-        "before the forecast date. These simple models establish the performance "
-        "floor that ARIMA, Prophet, or an ensemble should beat."
+        "One-step baselines are scored at every remaining week. The forecast "
+        "horizon does not change this sample. Each forecast uses only "
+        "observations from before that week. These simple models are the floor "
+        "a more complicated forecast still has to beat on a common design."
     )
 
     initial_train_size = max(12, min(len(weekly) - 2, max(52, int(len(weekly) * 0.60))))
@@ -405,7 +453,7 @@ with tabs[2]:
                 rolling_origin_baseline_backtest(
                     weekly,
                     initial_train_size=initial_train_size,
-                    step=max(1, forecast_horizon // 4),
+                    step=1,
                     season_length=52,
                 )
             )
@@ -513,20 +561,14 @@ with tabs[3]:
                                            weather_region)
         st.plotly_chart(fig_weather, use_container_width=True)
 
-        # Correlation with price
-        st.subheader("📊 Weather-Price Correlation Analysis")
-        common_idx = weekly.index.intersection(
-            pd.DatetimeIndex(weather_df.index)
+        st.subheader("📊 Weather and weekly price returns")
+        st.caption(
+            "Same-week association between price returns and weather, on exact "
+            "shared dates. Price levels are omitted because a shared trend is "
+            "not evidence of a relationship. This is not a lagged predictive feature."
         )
-        if len(common_idx) > 10:
-            w_aligned = weather_df.reindex(common_idx).ffill()
-            p_aligned = weekly.reindex(common_idx)
-            corr_df = pd.DataFrame({
-                "Price": p_aligned.values,
-            })
-            for col in weather_df.columns:
-                corr_df[col] = w_aligned[col].values
-
+        corr_df = weather_price_frame(weekly, weather_df)
+        if len(corr_df) > 10:
             corr_matrix = corr_df.corr()
             fig_corr = go.Figure(go.Heatmap(
                 z=corr_matrix.values,
@@ -537,7 +579,7 @@ with tabs[3]:
                 texttemplate="%{text:.2f}",
             ))
             fig_corr.update_layout(
-                title=f"Price vs Weather Correlation — {weather_region}",
+                title=f"Return vs weather association — {weather_region}",
                 template="plotly_dark", height=350,
             )
             st.plotly_chart(fig_corr, use_container_width=True)
@@ -546,11 +588,10 @@ with tabs[3]:
             "Weather data unavailable (API may be unreachable or dates out of "
             "range). The forecast still runs without weather features."
         )
-        # Simulate example weather chart
-        dates = pd.date_range(start_date, end_date, freq="W")
-        temp_sim = 15 + 10 * np.sin(np.linspace(0, 4 * np.pi, len(dates))) + \
-                   np.random.randn(len(dates)) * 3
-        precip_sim = np.abs(np.random.randn(len(dates)) * 20)
+        simulated = simulate_weather_data(str(start_date), str(end_date), seed=42)
+        dates = simulated.index
+        temp_sim = simulated["temperature_mean"]
+        precip_sim = simulated["precipitation_sum"]
 
         fig_sim = make_subplots(rows=2, cols=1, shared_xaxes=True,
                                  subplot_titles=["Temperature (°C)",
@@ -577,17 +618,21 @@ with tabs[4]:
         fig_decomp = plot_decomposition(decomp, commodity_name)
         st.plotly_chart(fig_decomp, use_container_width=True)
 
-        # Seasonality strength
-        seasonal_strength = decomp.seasonal.std() / decomp.observed.std()
-        trend_strength = decomp.trend.dropna().std() / decomp.observed.std()
+        strength = decomposition_strength(decomp)
+        seasonal_strength = strength["seasonal_strength"]
+        trend_strength = strength["trend_strength"]
         st.subheader("📊 Decomposition Insights")
         col1, col2, col3 = st.columns(3)
-        col1.metric("Seasonal Strength",
-                    f"{seasonal_strength:.3f}",
-                    help="Proportion of variance explained by seasonality")
-        col2.metric("Trend Strength",
-                    f"{trend_strength:.3f}",
-                    help="Proportion of variance explained by trend")
+        col1.metric(
+            "Seasonal Strength",
+            "n/a" if seasonal_strength is None else f"{seasonal_strength:.3f}",
+            help="Hyndman strength: max(0, 1 - Var(remainder) / Var(seasonal + remainder))",
+        )
+        col2.metric(
+            "Trend Strength",
+            "n/a" if trend_strength is None else f"{trend_strength:.3f}",
+            help="Hyndman strength: max(0, 1 - Var(remainder) / Var(trend + remainder))",
+        )
         col3.metric("Residual Std",
                     f"${decomp.resid.dropna().std():.2f}")
     else:
@@ -600,9 +645,10 @@ with tabs[4]:
 with tabs[5]:
     st.subheader("⚠️ Producer & Supplier Risk Dashboard")
     st.caption(
-        "Risk scores are derived from price volatility, drawdown history, "
-        "and simulated geopolitical proxies. "
-        "**Not a credit rating — for scenario analysis only.**"
+        "Volatility, drawdown, and trend scores are commodity-level and use "
+        "the last 52 weeks. They are the same for every producer. The "
+        "geopolitical column is a deterministic illustrative prior, not an "
+        "estimated country risk. **Not a credit rating.**"
     )
 
     # Compute risk scores
@@ -647,10 +693,10 @@ with tabs[5]:
         st.markdown("""
         | Component | Weight | Description |
         |-----------|--------|-------------|
-        | **Price Volatility** | 35% | Annualised standard deviation of weekly returns |
-        | **Max Drawdown** | 25% | Largest peak-to-trough loss in the period |
-        | **Trend Instability** | 20% | Number of trend reversals (rolling MA crossovers) |
-        | **Geopolitical Proxy** | 20% | Simulated score based on commodity type and region |
+        | **Price Volatility** | 35% | Annualised standard deviation of the last 52 weekly returns |
+        | **Max Drawdown** | 25% | Largest peak-to-trough loss of a wealth index starting at 1, over those same weeks |
+        | **Trend Instability** | 20% | Moving-average crossover rate over the last 52 weeks |
+        | **Geopolitical prior** | 20% | Deterministic illustrative prior by commodity and region, not estimated risk |
 
         Scores range from 0 (lowest risk) to 100 (highest risk). The overall score is a weighted average.
         """)
