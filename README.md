@@ -317,7 +317,7 @@ Automated tests cover:
 - an ARIMA(1, 1, 1) holdout that is scored before the full-sample refit;
 - the committed leaderboard headline numbers, a recomputation of the baselines and ARIMA from the committed snapshot, a Prophet recomputation that skips when Prophet is not installed, and a check that the README Results block matches `results/leaderboard.json`.
 
-GitHub Actions runs linting, source compilation, the regression suite, and validation-module import checks on Python **3.10 and 3.12**. A second workflow (`.github/workflows/pages.yml`) publishes `site/` plus `results/leaderboard.json` to GitHub Pages on every push to `main`.
+GitHub Actions runs linting, source compilation, the regression suite, and validation-module import checks on Python **3.10 and 3.12**. The live demo in `site/` is a static page that reads `results/leaderboard.json`; the GitHub Pages deploy copies both into one folder.
 
 ## Skills demonstrated
 
