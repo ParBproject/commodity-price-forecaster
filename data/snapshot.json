@@ -1,0 +1,20 @@
+{
+  "source": "Yahoo Finance via yfinance (src.data_loader.fetch_commodity_prices, auto_adjust=True, Close)",
+  "downloaded_on": "2026-09-30",
+  "requested_start": "2016-01-01",
+  "requested_end_exclusive": "2026-09-30",
+  "first_date": "2016-01-04",
+  "last_date": "2026-09-29",
+  "file": "commodity_prices_daily_2026-09-30.csv",
+  "tickers": {
+    "CL=F": "Crude Oil (WTI)",
+    "BZ=F": "Brent Crude",
+    "NG=F": "Natural Gas",
+    "GC=F": "Gold",
+    "SI=F": "Silver",
+    "HG=F": "Copper",
+    "ZC=F": "Corn",
+    "ZW=F": "Wheat",
+    "ZS=F": "Soybeans"
+  }
+}
