@@ -6,9 +6,13 @@ Data retrieval for:
   - Historical weather data via Open-Meteo (free, no API key required)
 """
 
+import logging
+
 import pandas as pd
 import requests
 import streamlit as st
+
+logger = logging.getLogger(__name__)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -46,6 +50,7 @@ def fetch_commodity_prices(
         )
 
         if data.empty:
+            logger.warning("No price data returned for %s (%s to %s)", ticker, start, end)
             return None
 
         # Extract Close; handle MultiIndex
@@ -56,9 +61,11 @@ def fetch_commodity_prices(
 
         prices = prices.ffill().dropna()
         prices.name = ticker
+        logger.info("Loaded %d daily closes for %s", len(prices), ticker)
         return prices
 
     except Exception as exc:
+        logger.exception("Price download failed for %s", ticker)
         st.error(f"Error fetching commodity data: {exc}")
         return None
 
@@ -138,9 +145,11 @@ def fetch_weather_data(
         return df_weekly.ffill().dropna(how="all")
 
     except requests.exceptions.ConnectionError:
-        # Return None silently — app handles gracefully
+        # The app falls back gracefully; log so the failure is visible in the terminal
+        logger.warning("Open-Meteo unreachable; continuing without weather data")
         return None
     except Exception as exc:
+        logger.exception("Weather data fetch failed")
         st.warning(f"Weather data fetch failed: {exc}")
         return None
 
