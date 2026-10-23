@@ -80,7 +80,7 @@ The intervals are badly **too narrow** for energy and precious metals over this 
 | Capability | Evidence |
 |---|---|
 | Real financial data | Commodity futures histories via Yahoo Finance |
-| Forecasting | Auto-ARIMA (seasonal only when the sample is long enough) and Prophet. No exogenous regressors. |
+| Forecasting | Auto-ARIMA (seasonal only when the sample is long enough), Prophet and an LSTM (PyTorch). No exogenous regressors. |
 | Baselines | Last-value, drift, and seasonal-naïve forecasts |
 | Validation | Rolling-origin one-step evaluation with no future leakage |
 | Forecast metrics | MAE, RMSE, MAPE, sMAPE, MASE, directional accuracy |
@@ -375,11 +375,17 @@ See **[FORECASTING_METHODOLOGY.md](FORECASTING_METHODOLOGY.md)** for benchmark d
 
 ## Roadmap
 
-- rolling-origin evaluation for each fitted ARIMA / Prophet candidate;
-- forecast calibration and interval-coverage diagnostics;
-- inventory, term-structure, FX, rates, and production fundamentals;
-- downloadable validation reports;
-- hosted dashboard deployment.
+Done:
+- rolling-origin evaluation of ARIMA and Prophet against baselines (52-week leaderboard, #22) and a walk-forward backtester for any model, with a Backtest tab (#29);
+- forecast calibration and interval-coverage diagnostics (`results/calibration.json`, #33);
+- downloadable validation reports, Markdown and CSV (#34);
+- LSTM model option (#35), cross-commodity correlations (#30), live ticker (#31), soft commodities (#26);
+- hosted static demo of the leaderboard: https://parbproject.github.io/commodity-price-forecaster/.
+
+Open:
+- USDA NASS crop-yield exogenous features (#8): needs a free QuickStats API key;
+- inventory, term-structure, FX, rates, and production fundamentals: needs data sources such as an EIA API key, and is a larger project;
+- hosting the full Streamlit dashboard (for example Streamlit Community Cloud): needs the owner's Streamlit account.
 
 ## Responsible use
 
