@@ -3,9 +3,11 @@ yfinance==0.2.66
 pandas==2.2.3
 numpy==2.2.6
 plotly==5.24.1
+matplotlib==3.10.0  # pandas Styler.background_gradient in the risk table
 scipy==1.15.3
 statsmodels==0.14.5
 requests==2.32.5
 pmdarima==2.1.1
 prophet==1.1.7
 cmdstanpy==1.2.5  # prophet 1.1.7 cannot load its bundled CmdStan with cmdstanpy 1.3
+torch==2.14.1  # LSTM model; CPU wheel: pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
