@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "generated_by": "scripts/run_calibration.py",
+  "snapshot_file": "data/commodity_prices_daily_2026-09-30.csv",
+  "method": "one-step ARIMA(1, 1, 1) prediction intervals, rolling origin, refit every week",
+  "n_origins": 52,
+  "per_commodity": {
+    "CL=F": {
+      "name": "Crude Oil (WTI)",
+      "80%": {
+        "nominal": 0.8,
+        "n": 52,
+        "hits": 31,
+        "coverage": 0.596154,
+        "misses_below": 11,
+        "misses_above": 10,
+        "binom_p_value": 0.000732,
+        "mean_relative_width": 0.120998
+      },
+      "95%": {
+        "nominal": 0.95,
+        "n": 52,
+        "hits": 37,
+        "coverage": 0.711538,
+        "misses_below": 7,
+        "misses_above": 8,
+        "binom_p_value": 0.0,
+        "mean_relative_width": 0.185051
+      }
+    },
+    "BZ=F": {
+      "name": "Brent Crude",
+      "80%": {
+        "nominal": 0.8,
+        "n": 52,
+        "hits": 27,
+        "coverage": 0.519231,
+        "misses_below": 12,
+        "misses_above": 13,
+        "binom_p_value": 5e-06,
+        "mean_relative_width": 0.113455
+      },
+      "95%": {
+        "nominal": 0.95,
+        "n": 52,
+        "hits": 39,
+        "coverage": 0.75,
+        "misses_below": 4,
+        "misses_above": 9,
+        "binom_p_value": 1e-06,
+        "mean_relative_width": 0.173515
+      }
+    },
+    "NG=F": {
+      "name": "Natural Gas",
+      "80%": {
+        "nominal": 0.8,
+        "n": 52,
+        "hits": 43,
+        "coverage": 0.826923,
+        "misses_below": 5,
+        "misses_above": 4,
+        "binom_p_value": 0.73064,
+        "mean_relative_width": 0.25752
+      },
+      "95%": {
+        "nominal": 0.95,
+        "n": 52,
+        "hits": 46,
+        "coverage": 0.884615,
+        "misses_below": 4,
+        "misses_above": 2,
+        "binom_p_value": 0.044536,
+        "mean_relative_width": 0.393843
+      }
+    },
+    "GC=F": {
+      "name": "Gold",
+      "80%": {
+        "nominal": 0.8,
+        "n": 52,
+        "hits": 13,
+        "coverage": 0.25,
+        "misses_below": 18,
+        "misses_above": 21,
+        "binom_p_value": 0.0,
+        "mean_relative_width": 0.029882
+      },
+      "95%": {
+        "nominal": 0.95,
+        "n": 52,
+        "hits": 23,
+        "coverage": 0.442308,
+        "misses_below": 12,
+        "misses_above": 17,
+        "binom_p_value": 0.0,
+        "mean_relative_width": 0.0457
+      }
+    },
+    "SI=F": {
+      "name": "Silver",
+      "80%": {
+        "nominal": 0.8,
+        "n": 52,
+        "hits": 21,
+        "coverage": 0.403846,
+        "misses_below": 12,
+        "misses_above": 19,
+        "binom_p_value": 0.0,
+        "mean_relative_width": 0.05978
+      },
+      "95%": {
+        "nominal": 0.95,
+        "n": 52,
+        "hits": 27,
+        "coverage": 0.519231,
+        "misses_below": 9,
+        "misses_above": 16,
+        "binom_p_value": 0.0,
+        "mean_relative_width": 0.091426
+      }
+    },
+    "HG=F": {
+      "name": "Copper",
+      "80%": {
+        "nominal": 0.8,
+        "n": 52,
+        "hits": 36,
+        "coverage": 0.692308,
+        "misses_below": 4,
+        "misses_above": 12,
+        "binom_p_value": 0.057268,
+        "mean_relative_width": 0.058345
+      },
+      "95%": {
+        "nominal": 0.95,
+        "n": 52,
+        "hits": 47,
+        "coverage": 0.903846,
+        "misses_below": 1,
+        "misses_above": 4,
+        "binom_p_value": 0.186867,
+        "mean_relative_width": 0.089231
+      }
+    },
+    "ZC=F": {
+      "name": "Corn",
+      "80%": {
+        "nominal": 0.8,
+        "n": 52,
+        "hits": 49,
+        "coverage": 0.942308,
+        "misses_below": 1,
+        "misses_above": 2,
+        "binom_p_value": 0.008227,
+        "mean_relative_width": 0.110291
+      },
+      "95%": {
+        "nominal": 0.95,
+        "n": 52,
+        "hits": 52,
+        "coverage": 1.0,
+        "misses_below": 0,
+        "misses_above": 0,
+        "binom_p_value": 0.113978,
+        "mean_relative_width": 0.168675
+      }
+    },
+    "ZW=F": {
+      "name": "Wheat",
+      "80%": {
+        "nominal": 0.8,
+        "n": 52,
+        "hits": 50,
+        "coverage": 0.961538,
+        "misses_below": 0,
+        "misses_above": 2,
+        "binom_p_value": 0.001489,
+        "mean_relative_width": 0.149514
+      },
+      "95%": {
+        "nominal": 0.95,
+        "n": 52,
+        "hits": 51,
+        "coverage": 0.980769,
+        "misses_below": 0,
+        "misses_above": 1,
+        "binom_p_value": 0.52118,
+        "mean_relative_width": 0.228662
+      }
+    },
+    "ZS=F": {
+      "name": "Soybeans",
+      "80%": {
+        "nominal": 0.8,
+        "n": 52,
+        "hits": 44,
+        "coverage": 0.846154,
+        "misses_below": 3,
+        "misses_above": 5,
+        "binom_p_value": 0.49008,
+        "mean_relative_width": 0.07781
+      },
+      "95%": {
+        "nominal": 0.95,
+        "n": 52,
+        "hits": 50,
+        "coverage": 0.961538,
+        "misses_below": 2,
+        "misses_above": 0,
+        "binom_p_value": 1.0,
+        "mean_relative_width": 0.119001
+      }
+    }
+  },
+  "pooled": {
+    "80%": {
+      "n": 468,
+      "hits": 314,
+      "coverage": 0.67094,
+      "binom_p_value": 0.0
+    },
+    "95%": {
+      "n": 468,
+      "hits": 372,
+      "coverage": 0.794872,
+      "binom_p_value": 0.0
+    }
+  }
+}
