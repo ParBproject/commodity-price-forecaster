@@ -127,6 +127,7 @@ from src.correlation import (
 from src.data_loader import fetch_many
 from src.ticker import banner_html, fetch_quotes
 from src.lstm_forecaster import fit_lstm
+from src.reports import predictions_csv, validation_report_markdown
 from src.utils import (
     plot_forecast,
     plot_decomposition,
@@ -565,6 +566,22 @@ with tabs[2]:
                 hide_index=True,
                 use_container_width=True,
             )
+            report_md = validation_report_markdown(
+                commodity=commodity_name, ticker=commodity_ticker,
+                start=start_date, end=end_date,
+                generated_at=pd.Timestamp.now(tz="UTC").strftime("%Y-%m-%d %H:%M UTC"),
+                settings={"Initial training weeks": initial_train_size, "Step": "1 week",
+                          "Season length": 52, "Origins": int(validation_predictions["date"].nunique())},
+                table=validation_table,
+            )
+            d1, d2 = st.columns(2)
+            d1.download_button("⬇️ Validation report (Markdown)", report_md,
+                               file_name=f"validation_{commodity_ticker}.md", mime="text/markdown",
+                               use_container_width=True, on_click="ignore")
+            d2.download_button("⬇️ Out-of-sample forecasts (CSV)",
+                               predictions_csv(validation_predictions),
+                               file_name=f"validation_forecasts_{commodity_ticker}.csv",
+                               mime="text/csv", use_container_width=True, on_click="ignore")
 
             comparison = validation_predictions.pivot(
                 index="date",
@@ -809,6 +826,9 @@ with tabs[6]:
                 horizon=bt_horizon,
             )
         summ = bt["summary"]
+        st.download_button("⬇️ Backtest forecasts (CSV)", predictions_csv(bt["predictions"]),
+                           file_name=f"backtest_{commodity_ticker}.csv", mime="text/csv",
+                           on_click="ignore")
         m1, m2, m3, m4 = st.columns(4)
         m1.metric("Mean MAE", f"${summ['mean_MAE']:.2f}")
         m2.metric("Mean RMSE", f"${summ['mean_RMSE']:.2f}")
