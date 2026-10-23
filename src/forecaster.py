@@ -90,6 +90,7 @@ def forecast_export_frame(
     arima_result: dict | None,
     prophet_result: dict | None,
     confidence: int,
+    lstm_result: dict | None = None,
 ) -> pd.DataFrame | None:
     """Point forecasts and intervals for every model that actually ran."""
     frames: list[pd.DataFrame] = []
@@ -109,10 +110,20 @@ def forecast_export_frame(
             f"Prophet upper {confidence}%",
         ]
         frames.append(prophet)
+    if lstm_result is not None and "forecast_df" in lstm_result:
+        lstm = lstm_result["forecast_df"][["forecast", "lower", "upper"]].copy()
+        lstm.columns = [
+            "LSTM forecast",
+            f"LSTM lower {confidence}% (approx.)",
+            f"LSTM upper {confidence}% (approx.)",
+        ]
+        frames.append(lstm)
     if not frames:
         return None
 
-    table = frames[0] if len(frames) == 1 else frames[0].join(frames[1], how="outer")
+    table = frames[0]
+    for extra in frames[1:]:
+        table = table.join(extra, how="outer")
     if {"ARIMA forecast", "Prophet forecast"}.issubset(table.columns):
         table["Ensemble forecast"] = table[
             ["ARIMA forecast", "Prophet forecast"]
