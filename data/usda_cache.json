@@ -1,0 +1,2113 @@
+{
+ "source": "USDA NASS Quick Stats API",
+ "api": "https://quickstats.nass.usda.gov/api/api_GET/",
+ "downloaded_on": "2026-10-23",
+ "filters": {
+  "agg_level_desc": "NATIONAL",
+  "source_desc": "SURVEY",
+  "year__GE": 2010
+ },
+ "series": {
+  "ZC=F": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+  "ZW=F": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+  "ZS=F": "SOYBEANS - YIELD, MEASURED IN BU / ACRE"
+ },
+ "records": {
+  "ZC=F": [
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2026,
+    "reference_period_desc": "YEAR",
+    "Value": "181.2",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2026-10-09 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2026,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "180.7",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2026-08-12 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2026,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "181.2",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2026-10-09 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2026,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "178.8",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2026-09-11 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2025,
+    "reference_period_desc": "YEAR",
+    "Value": "186.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2026-09-30 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2025,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "188.8",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2025-08-12 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2025,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "186",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2025-11-14 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2025,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "186.7",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2025-09-12 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2024,
+    "reference_period_desc": "YEAR",
+    "Value": "179.3",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2025-09-30 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2024,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "183.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-08-12 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2024,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "183.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-11-08 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2024,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "183.8",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-10-11 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2024,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "183.6",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-09-12 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2023,
+    "reference_period_desc": "YEAR",
+    "Value": "177.3",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-09-30 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2023,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "175.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2023-08-11 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2023,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "174.9",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2023-11-09 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2023,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "173",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2023-10-12 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2023,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "173.8",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2023-09-12 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2022,
+    "reference_period_desc": "YEAR",
+    "Value": "173.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-01-09 15:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2022,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "175.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2022-08-12 12:00:52.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2022,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "172.3",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2022-11-09 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2022,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "171.9",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2022-10-12 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2022,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "172.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2022-09-12 12:03:33.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2021,
+    "reference_period_desc": "YEAR",
+    "Value": "176.7",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-01-09 15:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2021,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "174.6",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2021-08-12 12:01:34.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2021,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "177",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2021-11-09 12:02:06.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2021,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "176.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2021-10-12 12:01:38.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2021,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "176.3",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2021-09-10 12:08:17.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2020,
+    "reference_period_desc": "YEAR",
+    "Value": "171.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-01-09 15:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2020,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "181.8",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2020-08-12 12:04:12.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2020,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "175.8",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2020-11-10 12:02:34.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2020,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "178.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2020-10-09 12:01:33.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2020,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "178.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2020-09-11 12:03:32.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2019,
+    "reference_period_desc": "YEAR",
+    "Value": "167.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-01-09 15:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2019,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "169.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-08-12 12:01:08.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2019,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "167",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-11-08 12:00:46.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2019,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "168.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-10-10 12:03:54.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2019,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "168.2",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-09-12 12:01:19.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2018,
+    "reference_period_desc": "YEAR",
+    "Value": "176.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-01-09 15:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2018,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "178.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2018-08-10 12:01:40.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2018,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "178.9",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2018-11-08 12:01:20.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2018,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "180.7",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2018-10-11 12:02:09.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2018,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "181.3",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2018-09-12 12:02:09.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2017,
+    "reference_period_desc": "YEAR",
+    "Value": "176.6",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-02-06 15:00:06.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2017,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "169.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2017-08-10 12:08:28.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2017,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "175.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2017-11-09 12:02:08.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2017,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "171.8",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2017-10-12 12:04:13.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2017,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "169.9",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2017-09-12 12:01:44.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2016,
+    "reference_period_desc": "YEAR",
+    "Value": "174.6",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-02-06 15:00:06.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2016,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "175.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2016-08-12 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2016,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "175.3",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2016-11-09 13:11:41.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2016,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "173.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2016-10-12 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2016,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "174.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2016-09-12 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2015,
+    "reference_period_desc": "YEAR",
+    "Value": "168.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-02-06 15:00:06.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2015,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "168.8",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2015-08-12 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2015,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "169.3",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2015-11-10 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2015,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "168",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2015-10-09 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2015,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "167.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2015-09-11 12:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2014,
+    "reference_period_desc": "YEAR",
+    "Value": "171",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-02-06 15:00:06.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2014,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "167.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2014-08-12 12:00:16.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2014,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "173.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2014-11-10 12:04:43.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2014,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "174.2",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2014-10-10 12:10:23.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2014,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "171.7",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2014-09-11 12:00:26.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2013,
+    "reference_period_desc": "YEAR",
+    "Value": "158.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-02-06 15:00:06.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2013,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "154.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2013-08-12 12:25:57.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2013,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "160.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2013-11-08 14:14:29.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2013,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "155.3",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2013-09-12 12:27:34.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2012,
+    "reference_period_desc": "YEAR",
+    "Value": "123.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2014-11-03 16:18:55.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2012,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "123.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-08-10 12:59:15.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2012,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "122.3",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-11-09 10:26:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2012,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "122",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-10-11 11:19:07.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2012,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "122.8",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-09-12 11:03:54.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2011,
+    "reference_period_desc": "YEAR",
+    "Value": "146.8",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2014-11-03 16:18:55.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2011,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "153",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-01-01 00:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2011,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "146.7",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-01-01 00:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2011,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "148.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-01-01 00:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2011,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "148.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-01-01 00:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2010,
+    "reference_period_desc": "YEAR",
+    "Value": "152.6",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2014-11-03 16:18:55.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2010,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "165",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-01-01 00:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2010,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "154.3",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-01-01 00:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2010,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "155.8",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-01-01 00:00:00.000"
+   },
+   {
+    "short_desc": "CORN, GRAIN - YIELD, MEASURED IN BU / ACRE",
+    "year": 2010,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "162.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-01-01 00:00:00.000"
+   }
+  ],
+  "ZW=F": [
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2026,
+    "reference_period_desc": "YEAR",
+    "Value": "48.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2026-09-30 12:00:00.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2026,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "47.8",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2026-08-12 12:00:00.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2026,
+    "reference_period_desc": "YEAR - JUL FORECAST",
+    "Value": "47.9",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2026-07-10 12:00:00.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2025,
+    "reference_period_desc": "YEAR",
+    "Value": "53.3",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2026-09-30 12:00:00.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2025,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "52.7",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2025-08-12 12:00:00.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2025,
+    "reference_period_desc": "YEAR - JUL FORECAST",
+    "Value": "52.6",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2025-07-11 12:00:00.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2024,
+    "reference_period_desc": "YEAR",
+    "Value": "51.2",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2025-09-30 12:00:00.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2024,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "52.2",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-08-12 12:00:00.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2024,
+    "reference_period_desc": "YEAR - JUL FORECAST",
+    "Value": "51.8",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-07-12 12:00:00.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2023,
+    "reference_period_desc": "YEAR",
+    "Value": "48.7",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-09-30 12:00:00.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2023,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "45.8",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2023-08-11 12:00:00.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2023,
+    "reference_period_desc": "YEAR - JUL FORECAST",
+    "Value": "46.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2023-07-12 12:00:00.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2022,
+    "reference_period_desc": "YEAR",
+    "Value": "46.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-01-09 15:00:00.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2022,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "47.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2022-08-12 12:00:52.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2022,
+    "reference_period_desc": "YEAR - JUL FORECAST",
+    "Value": "47.3",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2022-07-12 12:00:38.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2021,
+    "reference_period_desc": "YEAR",
+    "Value": "44.3",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-01-09 15:00:00.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2021,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "44.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2021-08-12 12:01:34.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2021,
+    "reference_period_desc": "YEAR - JUL FORECAST",
+    "Value": "45.8",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2021-07-12 12:00:27.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2020,
+    "reference_period_desc": "YEAR",
+    "Value": "49.7",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-01-09 15:00:00.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2020,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "50.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2020-08-12 12:04:12.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2020,
+    "reference_period_desc": "YEAR - JUL FORECAST",
+    "Value": "49.7",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2020-07-10 12:03:03.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2019,
+    "reference_period_desc": "YEAR",
+    "Value": "51.7",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-01-09 15:00:00.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2019,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "51.6",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-08-12 12:01:08.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2019,
+    "reference_period_desc": "YEAR - JUL FORECAST",
+    "Value": "50",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-07-11 12:01:03.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2018,
+    "reference_period_desc": "YEAR",
+    "Value": "47.6",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-01-09 15:00:00.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2018,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "47.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2018-08-10 12:01:40.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2018,
+    "reference_period_desc": "YEAR - JUL FORECAST",
+    "Value": "47.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2018-07-12 12:00:55.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2017,
+    "reference_period_desc": "YEAR",
+    "Value": "46.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-02-06 15:00:06.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2017,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "45.6",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2017-08-10 12:08:28.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2017,
+    "reference_period_desc": "YEAR - JUL FORECAST",
+    "Value": "46.2",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2017-07-12 12:01:17.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2016,
+    "reference_period_desc": "YEAR",
+    "Value": "52.7",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-02-06 15:00:06.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2016,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "52.6",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2016-08-12 12:00:00.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2016,
+    "reference_period_desc": "YEAR - JUL FORECAST",
+    "Value": "51.3",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2016-07-12 12:00:00.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2015,
+    "reference_period_desc": "YEAR",
+    "Value": "43.6",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-02-06 15:00:06.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2015,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "44.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2015-08-12 12:00:00.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2015,
+    "reference_period_desc": "YEAR - JUL FORECAST",
+    "Value": "44.3",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2015-07-10 12:00:00.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2014,
+    "reference_period_desc": "YEAR",
+    "Value": "43.7",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-02-06 15:00:06.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2014,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "43.9",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2014-08-12 12:00:16.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2014,
+    "reference_period_desc": "YEAR - JUL FORECAST",
+    "Value": "43.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2014-07-11 12:03:10.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2013,
+    "reference_period_desc": "YEAR",
+    "Value": "47.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-02-06 15:00:06.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2013,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "46.2",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2013-08-12 12:25:57.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2013,
+    "reference_period_desc": "YEAR - JUL FORECAST",
+    "Value": "46.2",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2013-07-11 13:38:49.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2012,
+    "reference_period_desc": "YEAR",
+    "Value": "46.2",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2014-11-03 16:18:55.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2011,
+    "reference_period_desc": "YEAR",
+    "Value": "43.6",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2014-11-03 16:18:55.000"
+   },
+   {
+    "short_desc": "WHEAT - YIELD, MEASURED IN BU / ACRE",
+    "year": 2010,
+    "reference_period_desc": "YEAR",
+    "Value": "46.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2014-11-03 16:18:55.000"
+   }
+  ],
+  "ZS=F": [
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2026,
+    "reference_period_desc": "YEAR",
+    "Value": "53.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2026-10-09 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2026,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "52.7",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2026-08-12 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2026,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "53.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2026-10-09 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2026,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "52.8",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2026-09-11 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2025,
+    "reference_period_desc": "YEAR",
+    "Value": "53",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2026-09-30 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2025,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "53.6",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2025-08-12 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2025,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "53",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2025-11-14 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2025,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "53.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2025-09-12 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2024,
+    "reference_period_desc": "YEAR",
+    "Value": "50.7",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2025-09-30 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2024,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "53.2",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-08-12 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2024,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "51.7",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-11-08 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2024,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "53.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-10-11 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2024,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "53.2",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-09-12 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2023,
+    "reference_period_desc": "YEAR",
+    "Value": "50.6",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-09-30 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2023,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "50.9",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2023-08-11 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2023,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "49.9",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2023-11-09 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2023,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "49.6",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2023-10-12 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2023,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "50.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2023-09-12 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2022,
+    "reference_period_desc": "YEAR",
+    "Value": "49.6",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-01-09 15:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2022,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "51.9",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2022-08-12 12:00:52.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2022,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "50.2",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2022-11-09 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2022,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "49.8",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2022-10-12 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2022,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "50.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2022-09-12 12:03:33.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2021,
+    "reference_period_desc": "YEAR",
+    "Value": "51.7",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-01-09 15:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2021,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "50",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2021-08-12 12:01:34.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2021,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "51.2",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2021-11-09 12:02:06.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2021,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "51.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2021-10-12 12:01:38.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2021,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "50.6",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2021-09-10 12:08:17.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2020,
+    "reference_period_desc": "YEAR",
+    "Value": "51",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-01-09 15:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2020,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "53.3",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2020-08-12 12:04:12.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2020,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "50.7",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2020-11-10 12:02:34.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2020,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "51.9",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2020-10-09 12:01:33.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2020,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "51.9",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2020-09-11 12:03:32.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2019,
+    "reference_period_desc": "YEAR",
+    "Value": "47.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-01-09 15:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2019,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "48.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-08-12 12:01:08.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2019,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "46.9",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-11-08 12:00:46.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2019,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "46.9",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-10-10 12:03:54.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2019,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "47.9",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-09-12 12:01:19.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2018,
+    "reference_period_desc": "YEAR",
+    "Value": "50.6",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2024-01-09 15:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2018,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "51.6",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2018-08-10 12:01:40.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2018,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "52.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2018-11-08 12:01:20.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2018,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "53.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2018-10-11 12:02:09.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2018,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "52.8",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2018-09-12 12:02:09.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2017,
+    "reference_period_desc": "YEAR",
+    "Value": "49.3",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-02-06 15:00:06.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2017,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "49.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2017-08-10 12:08:28.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2017,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "49.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2017-11-09 12:02:08.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2017,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "49.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2017-10-12 12:04:13.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2017,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "49.9",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2017-09-12 12:01:44.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2016,
+    "reference_period_desc": "YEAR",
+    "Value": "51.9",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-02-06 15:00:06.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2016,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "48.9",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2016-08-12 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2016,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "52.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2016-11-09 13:11:41.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2016,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "51.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2016-10-12 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2016,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "50.6",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2016-09-12 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2015,
+    "reference_period_desc": "YEAR",
+    "Value": "48",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-02-06 15:00:06.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2015,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "46.9",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2015-08-12 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2015,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "48.3",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2015-11-10 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2015,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "47.2",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2015-10-09 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2015,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "47.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2015-09-11 12:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2014,
+    "reference_period_desc": "YEAR",
+    "Value": "47.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-02-06 15:00:06.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2014,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "45.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2014-08-12 12:00:16.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2014,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "47.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2014-11-10 12:04:43.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2014,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "47.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2014-10-10 12:10:23.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2014,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "46.6",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2014-09-11 12:00:26.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2013,
+    "reference_period_desc": "YEAR",
+    "Value": "44",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2019-02-06 15:00:06.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2013,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "42.6",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2013-08-12 12:25:57.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2013,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "43",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2013-11-08 14:14:29.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2013,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "41.2",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2013-09-12 12:27:34.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2012,
+    "reference_period_desc": "YEAR",
+    "Value": "40",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2014-11-03 16:18:55.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2012,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "36.1",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-08-10 12:59:15.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2012,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "39.3",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-11-09 10:26:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2012,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "37.8",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-10-11 11:19:07.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2012,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "35.3",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-09-12 11:03:54.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2011,
+    "reference_period_desc": "YEAR",
+    "Value": "42",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2014-11-03 16:18:55.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2011,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "41.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-01-01 00:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2011,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "41.3",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-01-01 00:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2011,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "41.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-01-01 00:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2011,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "41.8",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-01-01 00:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2010,
+    "reference_period_desc": "YEAR",
+    "Value": "43.5",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2014-11-03 16:18:55.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2010,
+    "reference_period_desc": "YEAR - AUG FORECAST",
+    "Value": "44",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-01-01 00:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2010,
+    "reference_period_desc": "YEAR - NOV FORECAST",
+    "Value": "43.9",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-01-01 00:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2010,
+    "reference_period_desc": "YEAR - OCT FORECAST",
+    "Value": "44.4",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-01-01 00:00:00.000"
+   },
+   {
+    "short_desc": "SOYBEANS - YIELD, MEASURED IN BU / ACRE",
+    "year": 2010,
+    "reference_period_desc": "YEAR - SEP FORECAST",
+    "Value": "44.7",
+    "source_desc": "SURVEY",
+    "agg_level_desc": "NATIONAL",
+    "freq_desc": "ANNUAL",
+    "load_time": "2012-01-01 00:00:00.000"
+   }
+  ]
+ }
+}

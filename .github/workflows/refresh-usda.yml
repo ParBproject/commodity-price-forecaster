@@ -2,9 +2,6 @@ name: refresh-usda
 
 on:
   workflow_dispatch:
-  push:
-    branches: [usda-nass-features]
-    paths: [.github/workflows/refresh-usda.yml]
 
 permissions:
   contents: read
