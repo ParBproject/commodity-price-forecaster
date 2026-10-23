@@ -23,6 +23,10 @@ _GEO_RISK = {
     "ZW=F": 35,
     "ZS=F": 18,
     "HG=F": 40,
+    "KC=F": 45,
+    "CC=F": 55,
+    "SB=F": 30,
+    "CT=F": 35,
 }
 
 _PRODUCERS = {
@@ -35,6 +39,28 @@ _PRODUCERS = {
     "ZW=F": ["China", "India", "Russia", "USA", "France"],
     "ZS=F": ["USA", "Brazil", "Argentina", "China", "India"],
     "HG=F": ["Chile", "Peru", "China", "DRC", "USA"],
+    "KC=F": ["Brazil", "Vietnam", "Colombia", "Ethiopia", "Honduras"],
+    "CC=F": ["Côte d'Ivoire", "Ghana", "Ecuador", "Cameroon", "Nigeria"],
+    "SB=F": ["Brazil", "India", "Thailand", "China", "USA"],
+    "CT=F": ["India", "China", "USA", "Brazil", "Pakistan"],
+}
+
+# Tickers offered in the dashboard. The leaderboard snapshot (data/snapshot.json) covers
+# the first nine only; the four softs are live-data only in the app.
+COMMODITIES = {
+    "Crude Oil (WTI)": "CL=F",
+    "Natural Gas": "NG=F",
+    "Gold": "GC=F",
+    "Silver": "SI=F",
+    "Corn": "ZC=F",
+    "Wheat": "ZW=F",
+    "Soybeans": "ZS=F",
+    "Copper": "HG=F",
+    "Brent Crude": "BZ=F",
+    "Coffee (Arabica)": "KC=F",
+    "Cocoa": "CC=F",
+    "Sugar #11": "SB=F",
+    "Cotton": "CT=F",
 }
 
 
