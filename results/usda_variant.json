@@ -1,0 +1,74 @@
+{
+ "generated_by": "scripts/run_usda_variant.py",
+ "usda_snapshot": "data/usda_cache.json",
+ "usda_downloaded_on": "2026-10-23",
+ "price_snapshot": "data/commodity_prices_daily_2026-09-30.csv",
+ "n_origins": 52,
+ "feature": "log(latest NASS national yield estimate / previous crop year final), as known at each week-end (reports dated the 12th), forward-filled",
+ "commodities": {
+  "ZC=F": "Corn",
+  "ZW=F": "Wheat",
+  "ZS=F": "Soybeans"
+ },
+ "per_commodity": {
+  "ZC=F": {
+   "ARIMA(1,1,1)": {
+    "MAE": 9.012813,
+    "RMSE": 11.568636,
+    "MAPE": 2.007893,
+    "sMAPE": 2.011685,
+    "MASE": 0.738445,
+    "DirectionalAccuracy": 0.634615
+   },
+   "ARIMA(1,1,1)+USDA yield": {
+    "MAE": 9.013668,
+    "RMSE": 11.570689,
+    "MAPE": 2.008077,
+    "sMAPE": 2.011877,
+    "MASE": 0.738515,
+    "DirectionalAccuracy": 0.634615
+   }
+  },
+  "ZW=F": {
+   "ARIMA(1,1,1)": {
+    "MAE": 17.199282,
+    "RMSE": 23.455196,
+    "MAPE": 2.79734,
+    "sMAPE": 2.822561,
+    "MASE": 0.890504,
+    "DirectionalAccuracy": 0.576923
+   },
+   "ARIMA(1,1,1)+USDA yield": {
+    "MAE": 17.050992,
+    "RMSE": 23.2058,
+    "MAPE": 2.775573,
+    "sMAPE": 2.800039,
+    "MASE": 0.882826,
+    "DirectionalAccuracy": 0.576923
+   }
+  },
+  "ZS=F": {
+   "ARIMA(1,1,1)": {
+    "MAE": 22.296163,
+    "RMSE": 28.608795,
+    "MAPE": 1.93273,
+    "sMAPE": 1.938161,
+    "MASE": 0.903339,
+    "DirectionalAccuracy": 0.442308
+   },
+   "ARIMA(1,1,1)+USDA yield": {
+    "MAE": 22.280311,
+    "RMSE": 28.596431,
+    "MAPE": 1.931419,
+    "sMAPE": 1.93683,
+    "MASE": 0.902696,
+    "DirectionalAccuracy": 0.442308
+   }
+  }
+ },
+ "average_mase": {
+  "ARIMA(1,1,1)": 0.844096,
+  "ARIMA(1,1,1)+USDA yield": 0.841346
+ },
+ "mase_change": -0.00275
+}
