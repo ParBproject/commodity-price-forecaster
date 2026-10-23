@@ -226,6 +226,7 @@ These previews are the current Streamlit app on its default view: WTI crude oil,
 | Energy | WTI crude oil, Brent crude, natural gas |
 | Metals | Gold, silver, copper |
 | Agriculture | Corn, wheat, soybeans |
+| Softs | Coffee (Arabica) `KC=F`, cocoa `CC=F`, sugar #11 `SB=F`, cotton `CT=F` (live data in the dashboard; not part of the frozen leaderboard snapshot) |
 
 ## Weather integration
 

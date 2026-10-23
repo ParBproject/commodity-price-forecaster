@@ -119,3 +119,20 @@ def test_simulated_weather_is_repeatable_without_touching_global_rng():
 
     pd.testing.assert_frame_equal(first, second)
     assert observed == expected
+
+
+def test_soft_commodities_are_offered_with_risk_priors():
+    import numpy as np
+    import pandas as pd
+
+    from src.market import _GEO_RISK, _PRODUCERS, COMMODITIES, compute_risk_scores
+
+    softs = {"Coffee (Arabica)": "KC=F", "Cocoa": "CC=F", "Sugar #11": "SB=F", "Cotton": "CT=F"}
+    for name, ticker in softs.items():
+        assert COMMODITIES[name] == ticker
+        assert ticker in _GEO_RISK and len(_PRODUCERS[ticker]) == 5
+        idx = pd.date_range("2022-01-07", periods=120, freq="W-FRI")
+        prices = pd.Series(100 + np.cumsum(np.sin(np.arange(120))), index=idx, name=ticker)
+        table = compute_risk_scores(prices, name)
+        assert len(table) == 5
+    assert len(set(COMMODITIES.values())) == len(COMMODITIES) == 13

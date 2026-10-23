@@ -110,17 +110,7 @@ with st.sidebar:
     st.markdown("---")
 
     # Commodity selection
-    COMMODITIES = {
-        "Crude Oil (WTI)": "CL=F",
-        "Natural Gas": "NG=F",
-        "Gold": "GC=F",
-        "Silver": "SI=F",
-        "Corn": "ZC=F",
-        "Wheat": "ZW=F",
-        "Soybeans": "ZS=F",
-        "Copper": "HG=F",
-        "Brent Crude": "BZ=F",
-    }
+    from src.market import COMMODITIES
 
     commodity_name = st.selectbox("Select Commodity", list(COMMODITIES.keys()))
     commodity_ticker = COMMODITIES[commodity_name]
