@@ -25,6 +25,7 @@ def plot_forecast(
     commodity_name: str,
     confidence_level: int = 95,
     history_weeks: int = 104,
+    lstm_result: Optional[dict] = None,
 ) -> go.Figure:
     """
     Build an interactive Plotly chart showing historical prices plus
@@ -77,6 +78,31 @@ def plot_forecast(
                 x=test_idx, y=test_pred,
                 name="ARIMA holdout forecast",
                 line=dict(color="#EF553B", width=1, dash="dot"),
+                opacity=0.6,
+            ))
+
+    # LSTM forecast
+    if lstm_result:
+        fc_df = lstm_result["forecast_df"]
+        fig.add_trace(go.Scatter(
+            x=fc_df.index, y=fc_df["forecast"],
+            name="LSTM Forecast",
+            line=dict(color="#A78BFA", width=2, dash="dash"),
+        ))
+        fig.add_trace(go.Scatter(
+            x=fc_df.index.tolist() + fc_df.index.tolist()[::-1],
+            y=fc_df["upper"].tolist() + fc_df["lower"].tolist()[::-1],
+            fill="toself",
+            fillcolor="rgba(167,139,250,0.15)",
+            line=dict(color="rgba(255,255,255,0)"),
+            name=f"LSTM {confidence_level}% band (approx.)",
+            showlegend=True,
+        ))
+        if "test" in lstm_result and "test_pred" in lstm_result:
+            fig.add_trace(go.Scatter(
+                x=lstm_result["test"].index, y=np.asarray(lstm_result["test_pred"]).flatten(),
+                name="LSTM holdout forecast",
+                line=dict(color="#A78BFA", width=1, dash="dot"),
                 opacity=0.6,
             ))
 

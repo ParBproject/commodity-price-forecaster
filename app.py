@@ -126,6 +126,7 @@ from src.correlation import (
 )
 from src.data_loader import fetch_many
 from src.ticker import banner_html, fetch_quotes
+from src.lstm_forecaster import fit_lstm
 from src.utils import (
     plot_forecast,
     plot_decomposition,
@@ -170,7 +171,7 @@ with st.sidebar:
     st.subheader("🔮 Forecast Settings")
 
     model_choice = st.selectbox("Model", ["Auto-ARIMA", "Prophet",
-                                           "Both (Ensemble)"])
+                                           "Both (Ensemble)", "LSTM"])
     forecast_horizon = st.slider("Forecast Horizon (weeks)", 4, 52, 12)
     confidence = st.slider("Confidence Interval (%)", 80, 99, 95)
 
@@ -279,6 +280,7 @@ if not run_btn:
         |-------|-------------|
         | **Auto-ARIMA** | Selects an ARIMA order by AIC on the training prefix when `pmdarima` is installed. Seasonal terms are included only when the history is long enough. Otherwise the fit falls back to ARIMA(1, 1, 1). No exogenous regressors are used. |
         | **Prophet** | Prophet trend and seasonality with an uncertainty interval |
+        | **LSTM** | PyTorch LSTM on standardised weekly log returns (52-week window, 32 units, dropout 0.2, 150 epochs, seed 0). Holdout scored like ARIMA; intervals are approximate (residual spread × √h). |
         | **Ensemble** | Average of the ARIMA and Prophet paths when both models fit. The average is not a separately validated model. |
 
         ### Data Sources
@@ -381,7 +383,7 @@ with tabs[1]:
     )
 
     alpha = 1 - confidence / 100
-    arima_result, prophet_result = None, None
+    arima_result, prophet_result, lstm_result = None, None, None
 
     if model_choice in ["Auto-ARIMA", "Both (Ensemble)"]:
         with st.spinner("Fitting Auto-ARIMA model…"):
@@ -405,8 +407,18 @@ with tabs[1]:
                 "(it may be unavailable, or the history may be too short)."
             )
 
+    if model_choice == "LSTM":
+        with st.spinner("Training LSTM (CPU)…"):
+            lstm_result = fit_lstm(weekly, forecast_horizon, alpha=alpha)
+        if lstm_result is None:
+            st.warning(
+                "The LSTM could not be fit (torch may be missing, or the history is "
+                "shorter than the 52-week window plus training data)."
+            )
+
     display_arima = arima_result
     display_prophet = prophet_result
+    display_lstm = lstm_result
     if scenario_multiplier != 1.0:
         if arima_result is not None:
             display_arima = {
@@ -420,6 +432,13 @@ with tabs[1]:
                 **prophet_result,
                 "forecast_df": apply_price_scenario(
                     prophet_result["forecast_df"], scenario_multiplier
+                ),
+            }
+        if lstm_result is not None:
+            display_lstm = {
+                **lstm_result,
+                "forecast_df": apply_price_scenario(
+                    lstm_result["forecast_df"], scenario_multiplier
                 ),
             }
 
@@ -442,6 +461,13 @@ with tabs[1]:
         c2.metric("Prophet RMSE", f"{m['RMSE']:.2f}")
         c3.metric("Prophet MAPE", format_mape(m["MAPE"]))
 
+    if lstm_result:
+        m = lstm_result["metrics"]
+        c1, c2, c3 = st.columns(3)
+        c1.metric("LSTM MAE", f"{m['MAE']:.2f}")
+        c2.metric("LSTM RMSE", f"{m['RMSE']:.2f}")
+        c3.metric("LSTM MAPE", format_mape(m["MAPE"]))
+
     st.caption(
         "Holdout score: one multi-step forecast from a single origin at 85% "
         "of the sample, then the model is refit on the full sample for the "
@@ -454,7 +480,7 @@ with tabs[1]:
     # Forecast chart
     fig_fc = plot_forecast(
         weekly, display_arima, display_prophet, commodity_name,
-        confidence_level=confidence,
+        confidence_level=confidence, lstm_result=display_lstm,
     )
     st.plotly_chart(fig_fc, use_container_width=True)
 
