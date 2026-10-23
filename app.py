@@ -31,35 +31,35 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    .stApp { background: #F8FAFC; }
+    .stApp { background: #0B1120; }
     .block-container {
         max-width: 1450px;
         padding-top: 1.4rem;
         padding-bottom: 3rem;
     }
     div[data-testid="stMetric"] {
-        background: white;
-        border: 1px solid #E2E8F0;
+        background: #111827;
+        border: 1px solid #1F2937;
         border-radius: 15px;
         padding: .85rem 1rem;
-        box-shadow: 0 4px 14px rgba(15,23,42,.035);
+        box-shadow: none;
     }
     section[data-testid="stSidebar"] {
-        background: #F1F5F9;
-        border-right: 1px solid #E2E8F0;
+        background: #0F172A;
+        border-right: 1px solid #1F2937;
     }
     .commodity-hero {
         padding: 1.85rem 2.1rem;
         border-radius: 22px;
         background:
-            radial-gradient(circle at 88% 10%, rgba(245,158,11,.22), transparent 30%),
-            linear-gradient(135deg, #0F172A 0%, #1E3A5F 60%, #0F766E 130%);
+            radial-gradient(circle at 88% 10%, rgba(16,185,129,.22), transparent 30%),
+            linear-gradient(135deg, #0B1120 0%, #111827 60%, #10B981 160%);
         color: white;
-        box-shadow: 0 18px 48px rgba(15,23,42,.14);
+        border: 1px solid #1F2937;
         margin-bottom: 1rem;
     }
     .commodity-hero small {
-        color: #FDE68A;
+        color: #10B981;
         letter-spacing: .14em;
         text-transform: uppercase;
         font-weight: 750;
@@ -332,8 +332,8 @@ with tabs[0]:
                                              "Weekly Returns (%)"])
     fig_main.add_trace(
         go.Scatter(x=weekly.index, y=weekly.values, name="Price",
-                   line=dict(color="#636EFA", width=2),
-                   fill="tozeroy", fillcolor="rgba(99,110,250,0.1)"),
+                   line=dict(color="#10B981", width=2),
+                   fill="tozeroy", fillcolor="rgba(16,185,129,0.1)"),
         row=1, col=1,
     )
     # Returns bar chart
@@ -559,13 +559,13 @@ with tabs[2]:
                     x=comparison.index,
                     y=comparison["actual"],
                     name="Actual",
-                    line=dict(color="#0F172A", width=3),
+                    line=dict(color="#E5E7EB", width=3),
                 )
             )
             palette = {
-                "Last Value": "#0F766E",
-                "Drift": "#2563EB",
-                "Seasonal Naive": "#D97706",
+                "Last Value": "#10B981",
+                "Drift": "#60A5FA",
+                "Seasonal Naive": "#F59E0B",
             }
             for model in ["Last Value", "Drift", "Seasonal Naive"]:
                 if model in comparison:
@@ -584,11 +584,11 @@ with tabs[2]:
             validation_fig.update_layout(
                 title="Rolling-Origin Baseline Forecasts",
                 height=450,
-                paper_bgcolor="white",
-                plot_bgcolor="white",
-                font=dict(color="#0F172A"),
-                xaxis=dict(title="", gridcolor="#E2E8F0"),
-                yaxis=dict(title="Price", gridcolor="#E2E8F0"),
+                paper_bgcolor="#111827",
+                plot_bgcolor="#111827",
+                font=dict(color="#E5E7EB"),
+                xaxis=dict(title="", gridcolor="#1F2937"),
+                yaxis=dict(title="Price", gridcolor="#1F2937"),
                 legend=dict(orientation="h", y=-0.16),
                 margin=dict(l=55, r=25, t=65, b=70),
             )
