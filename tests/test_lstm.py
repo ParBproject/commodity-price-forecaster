@@ -52,3 +52,11 @@ def test_deterministic_and_documented():
 
 def test_too_short_returns_none():
     assert fit_lstm(_series(n=60), horizon=4) is None
+
+
+def test_export_frame_includes_lstm():
+    from src.forecaster import forecast_export_frame
+
+    res = fit_lstm(_series(), horizon=4)
+    table = forecast_export_frame(None, None, 95, res)
+    assert list(table.columns) == ["LSTM forecast", "LSTM lower 95% (approx.)", "LSTM upper 95% (approx.)"]

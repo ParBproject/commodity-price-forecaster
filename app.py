@@ -498,7 +498,7 @@ with tabs[1]:
 
     # Forecast table
     st.subheader("📋 Forecast Values Table")
-    fc_df = forecast_export_frame(display_arima, display_prophet, confidence)
+    fc_df = forecast_export_frame(display_arima, display_prophet, confidence, display_lstm)
     if fc_df is not None:
         fc_df = fc_df.copy()
         fc_df.index = fc_df.index.strftime("%Y-%m-%d")

@@ -3,6 +3,7 @@ yfinance==0.2.66
 pandas==2.2.3
 numpy==2.2.6
 plotly==5.24.1
+matplotlib==3.10.0  # pandas Styler.background_gradient in the risk table
 scipy==1.15.3
 statsmodels==0.14.5
 requests==2.32.5
