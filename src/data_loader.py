@@ -7,6 +7,7 @@ Data retrieval for:
 """
 
 import logging
+from concurrent.futures import ThreadPoolExecutor
 
 import pandas as pd
 import requests
@@ -187,3 +188,39 @@ def simulate_weather_data(
     from src.market import simulate_weather_data as _simulate_weather_data
 
     return _simulate_weather_data(start, end, freq=freq, seed=seed)
+
+
+def _ticker_history(ticker: str, start: str, end: str) -> pd.Series | None:
+    """Thread-safe single-ticker download.
+
+    ``yf.download`` keeps module-level state and is not safe to call from several
+    threads: concurrent calls were observed to return the same series for different
+    tickers. ``yf.Ticker(...).history`` keeps its state per object.
+    """
+    import yfinance as yf
+
+    try:
+        hist = yf.Ticker(ticker).history(start=start, end=end, auto_adjust=True)
+    except Exception:
+        logger.exception("Price download failed for %s", ticker)
+        return None
+    if hist.empty or "Close" not in hist:
+        return None
+    prices = hist["Close"].copy()
+    if prices.index.tz is not None:
+        prices.index = prices.index.tz_localize(None)
+    prices.index = prices.index.normalize()
+    prices = prices.ffill().dropna()
+    prices.name = ticker
+    return prices
+
+
+def fetch_many(tickers: dict[str, str], start: str, end: str, max_workers: int = 6) -> dict:
+    """Fetch several tickers in parallel. Returns {name: prices} for those that loaded."""
+    with ThreadPoolExecutor(max_workers=max_workers) as pool:
+        futures = {name: pool.submit(_ticker_history, t, start, end) for name, t in tickers.items()}
+        out = {name: f.result() for name, f in futures.items()}
+    missing = [n for n, s in out.items() if s is None or len(s) == 0]
+    if missing:
+        logger.warning("No data for %s", ", ".join(missing))
+    return {n: s for n, s in out.items() if n not in missing}
