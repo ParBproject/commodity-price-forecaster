@@ -72,6 +72,25 @@ st.markdown(
         max-width: 880px;
         line-height: 1.6;
     }
+    /* Narrow screens (< 1024px): let metric/column rows wrap instead of squeezing
+       five KPI cards until their values truncate. */
+    @media (max-width: 1024px) {
+        .block-container { padding-left: 1rem; padding-right: 1rem; }
+        div[data-testid="stHorizontalBlock"] { flex-wrap: wrap; row-gap: .75rem; }
+        div[data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] {
+            min-width: calc(33.333% - 1rem) !important;
+            flex: 1 1 calc(33.333% - 1rem) !important;
+        }
+        div[data-testid="stMetricValue"] { font-size: 1.55rem; }
+        .commodity-hero { padding: 1.3rem 1.3rem; }
+        .commodity-hero h1 { font-size: 1.6rem; }
+    }
+    @media (max-width: 640px) {
+        div[data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] {
+            min-width: calc(50% - 1rem) !important;
+            flex: 1 1 calc(50% - 1rem) !important;
+        }
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -255,7 +274,7 @@ with tabs[0]:
     high_label = "52-week High" if trailing["complete_window"] else "Sample High"
     low_label = "52-week Low" if trailing["complete_window"] else "Sample Low"
 
-    c1, c2, c3, c4, c5 = st.columns(5)
+    c1, c2, c3, c4, c5 = st.columns(5)  # wraps to 3 + 2 below 1024px (CSS above)
     c1.metric("Current Price", f"${current_price:.2f}")
     c2.metric("Total Return", f"{total_return:+.1f}%")
     c3.metric("Ann. Volatility", f"{ann_vol:.1f}%")
