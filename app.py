@@ -127,6 +127,7 @@ from src.correlation import (
 from src.data_loader import fetch_many
 from src.ticker import banner_html, fetch_quotes
 from src.lstm_forecaster import fit_lstm
+from src.usda_loader import AG_TICKERS, load_cache, yield_releases
 from src.reports import predictions_csv, validation_report_markdown
 from src.utils import (
     plot_forecast,
@@ -191,6 +192,12 @@ with st.sidebar:
     }
     weather_region = st.selectbox("Weather Region", list(WEATHER_REGIONS.keys()))
     weather_lat, weather_lon = WEATHER_REGIONS[weather_region]
+
+    # USDA crop reports (grains only; read from the committed NASS snapshot)
+    usda_enabled = False
+    if commodity_ticker in AG_TICKERS:
+        usda_enabled = st.checkbox("Include USDA Data", value=True,
+                                   help="NASS Quick Stats national yield estimates")
 
     # Scenario adjustment
     st.markdown("---")
@@ -699,6 +706,25 @@ with tabs[3]:
         fig_sim.update_layout(template="plotly_dark", height=400,
                                title="Simulated Weather Data (example)")
         st.plotly_chart(fig_sim, use_container_width=True)
+
+    if usda_enabled:
+        st.subheader("🌽 USDA NASS yield estimates")
+        usda_cache = load_cache()
+        releases = yield_releases(usda_cache["records"][commodity_ticker])
+        releases = releases[releases["released"] <= pd.Timestamp.today()]
+        fig_usda = make_subplots(specs=[[{"secondary_y": True}]])
+        fig_usda.add_trace(go.Scatter(x=weekly.index, y=weekly.values, name="Weekly close",
+                                      line=dict(color="#E5E7EB")), secondary_y=False)
+        fig_usda.add_trace(go.Scatter(x=releases["released"], y=releases["yield"],
+                                      name="Yield estimate (BU/ACRE)", mode="lines+markers",
+                                      line=dict(color="#10B981", shape="hv")),
+                           secondary_y=True)
+        fig_usda.update_layout(template="plotly_dark", height=380,
+                               title=f"{commodity_name}: price vs USDA yield estimates")
+        st.plotly_chart(fig_usda, use_container_width=True)
+        st.caption(f"Source: USDA NASS Quick Stats, snapshot pulled "
+                   f"{usda_cache['downloaded_on']} (data/usda_cache.json). Report dates "
+                   "are approximated as the 12th of the release month.")
 
 # ═══════════════════════════════════════════════════════════════════════════════
 #  TAB 3 — DECOMPOSITION
