@@ -10,12 +10,15 @@ Time-series forecasting pipeline:
 
 from __future__ import annotations
 
+import logging
 import warnings
 
 import numpy as np
 import pandas as pd
 
 warnings.filterwarnings("ignore")
+
+logger = logging.getLogger(__name__)
 
 MIN_FORECAST_OBSERVATIONS = 30
 
@@ -158,6 +161,7 @@ def forecast_with_fixed_arima(
         point = np.asarray(forecast_result.predicted_mean, dtype=float)
         bounds = np.asarray(forecast_result.conf_int(alpha=alpha), dtype=float)
     except Exception:
+        logger.warning("Fixed-order ARIMA%s fit failed", order, exc_info=True)
         return None
 
     return {
@@ -265,6 +269,7 @@ def fit_best_arima(
             "test_pred": test_pred,
         }
     except Exception:
+        logger.info("auto_arima failed; falling back to a fixed-order ARIMA", exc_info=True)
         fallback = forecast_with_fixed_arima(
             prepared,
             horizon=horizon,
@@ -322,7 +327,8 @@ def fit_prophet(
         try:
             from fbprophet import Prophet
         except ImportError:
-            return None  # Prophet not installed
+            logger.info("Prophet is not installed; skipping the Prophet forecast")
+            return None
 
     try:
         prepared = _prepare_price_series(series)
@@ -375,6 +381,7 @@ def fit_prophet(
         })
         forecast_df = forecast_df.clip(lower=0)
     except Exception:
+        logger.warning("Prophet fit failed", exc_info=True)
         return None
 
     return {
@@ -467,6 +474,7 @@ def decompose_series(
         result = stl.fit()
         return result
     except Exception:
+        logger.info("STL failed; falling back to classical decomposition", exc_info=True)
         try:
             from statsmodels.tsa.seasonal import seasonal_decompose
             result = seasonal_decompose(series, model=model_type,
