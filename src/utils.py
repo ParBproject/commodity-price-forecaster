@@ -46,7 +46,7 @@ def plot_forecast(
     fig.add_trace(go.Scatter(
         x=hist.index, y=hist.values,
         name="Historical Price",
-        line=dict(color="#636EFA", width=2),
+        line=dict(color="#10B981", width=2),
     ))
 
     # ARIMA forecast
@@ -148,7 +148,7 @@ def plot_decomposition(decomp, commodity_name: str) -> go.Figure:
     )
 
     for i, (data, color, name) in enumerate([
-        (observed, "#636EFA", "Observed"),
+        (observed, "#10B981", "Observed"),
         (trend, "#EF553B", "Trend"),
         (seasonal, "#00CC96", "Seasonal"),
         (residual, "#AB63FA", "Residual"),
@@ -203,7 +203,7 @@ def plot_weather_overlay(
     # Price
     fig.add_trace(go.Scatter(
         x=prices.index, y=prices.values,
-        name="Price", line=dict(color="#636EFA", width=2),
+        name="Price", line=dict(color="#10B981", width=2),
     ), row=1, col=1)
 
     # Exact dates only. method="nearest" can attach a later week to this week.
