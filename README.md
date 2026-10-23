@@ -69,6 +69,10 @@ Reproduce: `python scripts/run_leaderboard.py` (about a minute; Prophet is inclu
 | Engineering | Modular Python, tests, CI on Python 3.10/3.12 |
 | Reporting | Professional Streamlit research dashboard |
 
+## Companion project: Energy Sector Deep Dive
+
+[Energy Sector Deep Dive](https://github.com/ParBproject/energy-sector-deep-dive) ([live explorer](https://parbproject.github.io/energy-sector-deep-dive/)) uses the same WTI, Brent and Henry Hub series to ask how US oil & gas segments trade against oil. Its oil-scenario view offers this repo's latest one-step WTI forecast as a dated preset. The forecast is vendored at a pinned commit and labelled as already realized, so it is shown as a what-if input, not a signal.
+
 ## Research question
 
 The project is not framed as “which model produces the prettiest future line?”
