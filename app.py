@@ -8,6 +8,8 @@ and supplier/producer risk scoring.
 ⚠️ DISCLAIMER: For educational/simulation purposes only. Not financial advice.
 """
 
+import logging
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -16,6 +18,7 @@ from plotly.subplots import make_subplots
 import warnings
 
 warnings.filterwarnings("ignore")
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 
 # ── Page config ────────────────────────────────────────────────────────────────
 st.set_page_config(
