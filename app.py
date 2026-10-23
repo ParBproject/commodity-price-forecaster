@@ -125,6 +125,7 @@ from src.correlation import (
     spread_bands,
 )
 from src.data_loader import fetch_many
+from src.ticker import banner_html, fetch_quotes
 from src.utils import (
     plot_forecast,
     plot_decomposition,
@@ -145,6 +146,10 @@ with st.sidebar:
 
     commodity_name = st.selectbox("Select Commodity", list(COMMODITIES.keys()))
     commodity_ticker = COMMODITIES[commodity_name]
+    live_ticker = st.toggle(
+        "🔴 Live Ticker", value=False,
+        help="Refreshes every 60 s with delayed Yahoo Finance quotes for all commodities.",
+    )
     compare_names = st.multiselect(
         "Compare with (Correlations tab)",
         [n for n in COMMODITIES if n != commodity_name],
@@ -217,6 +222,25 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
+
+@st.fragment(run_every="60s")
+def live_ticker_banner():
+    """Re-runs on its own every 60 s; turning the toggle off removes it on the next app run."""
+    quotes = fetch_quotes(COMMODITIES)
+    if not quotes:
+        st.caption("Live quotes unavailable right now.")
+        return
+    st.markdown(banner_html(quotes, COMMODITIES), unsafe_allow_html=True)
+    newest = max(q["as_of"] for q in quotes.values())
+    st.caption(
+        f"Yahoo Finance quotes (delayed), latest print {newest:%Y-%m-%d %H:%M %Z}; "
+        "change vs previous session close. Refreshes every 60 s."
+    )
+
+
+if live_ticker:
+    live_ticker_banner()
 
 tabs = st.tabs([
     "Market Overview",
