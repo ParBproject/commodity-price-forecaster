@@ -94,6 +94,7 @@ from src.forecaster import (
 from src.formatting import format_directional_accuracy, format_mape
 from src.market import trailing_high_low, weekly_last, weather_price_frame
 from src.validation import rolling_origin_baseline_backtest
+from src.backtester import arima_model_fn, walk_forward_backtest
 from src.utils import (
     plot_forecast,
     plot_decomposition,
@@ -188,6 +189,7 @@ tabs = st.tabs([
     "Weather Context",
     "Decomposition",
     "Risk Dashboard",
+    "Backtest",
 ])
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -690,6 +692,71 @@ with tabs[5]:
 
         Scores range from 0 (lowest risk) to 100 (highest risk). The overall score is a weighted average.
         """)
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  TAB 6 — WALK-FORWARD BACKTEST
+# ═══════════════════════════════════════════════════════════════════════════════
+with tabs[6]:
+    st.subheader("🔁 Walk-forward backtest: ARIMA(1,1,1)")
+    st.caption(
+        "Expanding window. At each origin the model is refit on data up to that week "
+        "only, forecasts the next weeks, and the origin moves forward. Every point "
+        "below is out of sample. A fixed order keeps refits fast and avoids "
+        "re-selecting the order on future data."
+    )
+    b1, b2, b3 = st.columns(3)
+    bt_horizon = b1.slider("Horizon (weeks)", 1, 12, 4, key="bt_h")
+    bt_step = b2.slider("Step between origins (weeks)", 1, 12, 4, key="bt_s")
+    bt_init = b3.slider("Initial training weeks", 52, 156, 104, step=4, key="bt_i")
+    bt_series = weekly.dropna()
+    if len(bt_series) <= bt_init + bt_horizon:
+        st.info("Select a longer date range: the series is shorter than the initial window.")
+    else:
+        with st.spinner("Running walk-forward backtest…"):
+            bt = walk_forward_backtest(
+                bt_series,
+                arima_model_fn(horizon=bt_horizon, alpha=1 - confidence / 100),
+                initial_train_size=bt_init,
+                step_size=bt_step,
+                horizon=bt_horizon,
+            )
+        summ = bt["summary"]
+        m1, m2, m3, m4 = st.columns(4)
+        m1.metric("Mean MAE", f"${summ['mean_MAE']:.2f}")
+        m2.metric("Mean RMSE", f"${summ['mean_RMSE']:.2f}")
+        m3.metric("Mean MAPE", f"{summ['mean_MAPE']:.2f}%")
+        m4.metric(f"{confidence}% interval hit rate", f"{summ['hit_rate'] * 100:.1f}%")
+        pred = bt["predictions"]
+        fig_bt = go.Figure()
+        fig_bt.add_trace(go.Scatter(x=bt_series.index, y=bt_series.values, name="Actual",
+                                    line=dict(color="#94A3B8")))
+        for i, (_, g) in enumerate(pred.groupby("origin")):
+            fig_bt.add_trace(go.Scatter(x=g["date"], y=g["forecast"], mode="lines",
+                                        line=dict(color="#10B981", width=1.4),
+                                        name="Out-of-sample forecast", legendgroup="fc",
+                                        showlegend=i == 0))
+        fig_bt.update_layout(template="plotly_dark", height=420,
+                             title="Actual vs every out-of-sample forecast")
+        st.plotly_chart(fig_bt, use_container_width=True)
+        by_o = bt["by_origin"]
+        fig_mape = go.Figure(go.Scatter(x=by_o.index, y=by_o["MAPE"], mode="lines+markers",
+                                        line=dict(color="#F59E0B")))
+        fig_mape.update_layout(template="plotly_dark", height=320,
+                               title="MAPE by forecast origin (%)")
+        st.plotly_chart(fig_mape, use_container_width=True)
+        st.dataframe(
+            pd.DataFrame({
+                "Origins": [summ["n_origins"]],
+                "Forecasts scored": [summ["n_predictions"]],
+                "Failed fits": [summ["n_failed_origins"]],
+                "Mean MAE": [round(summ["mean_MAE"], 3)],
+                "Mean RMSE": [round(summ["mean_RMSE"], 3)],
+                "Mean MAPE (%)": [round(summ["mean_MAPE"], 3)],
+                "Hit rate (%)": [round(summ["hit_rate"] * 100, 1)],
+            }),
+            use_container_width=True, hide_index=True,
+        )
 
 # ── Footer ─────────────────────────────────────────────────────────────────────
 st.markdown("---")
