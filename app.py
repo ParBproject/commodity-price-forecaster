@@ -117,6 +117,14 @@ from src.formatting import format_directional_accuracy, format_mape
 from src.market import trailing_high_low, weekly_last, weather_price_frame
 from src.validation import rolling_origin_baseline_backtest
 from src.backtester import arima_model_fn, walk_forward_backtest
+from src.correlation import (
+    align_weekly,
+    normalized,
+    return_correlation,
+    rolling_correlation,
+    spread_bands,
+)
+from src.data_loader import fetch_many
 from src.utils import (
     plot_forecast,
     plot_decomposition,
@@ -137,6 +145,12 @@ with st.sidebar:
 
     commodity_name = st.selectbox("Select Commodity", list(COMMODITIES.keys()))
     commodity_ticker = COMMODITIES[commodity_name]
+    compare_names = st.multiselect(
+        "Compare with (Correlations tab)",
+        [n for n in COMMODITIES if n != commodity_name],
+        default=[],
+        help="Pick one or more commodities to compare against the selected one.",
+    )
 
     col1, col2 = st.columns(2)
     with col1:
@@ -212,6 +226,7 @@ tabs = st.tabs([
     "Decomposition",
     "Risk Dashboard",
     "Backtest",
+    "Correlations",
 ])
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -779,6 +794,68 @@ with tabs[6]:
             }),
             use_container_width=True, hide_index=True,
         )
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  TAB 7 — CROSS-COMMODITY CORRELATIONS
+# ═══════════════════════════════════════════════════════════════════════════════
+with tabs[7]:
+    st.subheader("🔗 Cross-commodity correlations")
+    if not compare_names:
+        st.info("Pick one or more commodities under **Compare with** in the sidebar.")
+    else:
+        selected = {commodity_name: commodity_ticker, **{n: COMMODITIES[n] for n in compare_names}}
+        with st.spinner("Loading comparison series in parallel…"):
+            loaded = fetch_many(selected, str(start_date), str(end_date))
+        if len(loaded) < 2:
+            st.warning("Fewer than two series loaded; nothing to compare.")
+        else:
+            panel = align_weekly(loaded)
+            st.caption(
+                f"{len(panel)} shared weeks, {panel.index[0].date()} to {panel.index[-1].date()}. "
+                "Correlations use weekly returns, not price levels."
+            )
+            fig_norm = go.Figure()
+            for col, series in normalized(panel).items():
+                fig_norm.add_trace(go.Scatter(x=series.index, y=series.values, name=col))
+            fig_norm.update_layout(template="plotly_dark", height=380,
+                                   title="Normalised price (first shared week = 100)")
+            st.plotly_chart(fig_norm, use_container_width=True)
+
+            corr = return_correlation(panel)
+            fig_cm = go.Figure(go.Heatmap(
+                z=corr.values, x=corr.columns.tolist(), y=corr.index.tolist(),
+                colorscale="RdBu", zmin=-1, zmax=1,
+                text=corr.round(2).values, texttemplate="%{text:.2f}",
+            ))
+            fig_cm.update_layout(template="plotly_dark", height=380,
+                                 title="Correlation of weekly returns")
+            st.plotly_chart(fig_cm, use_container_width=True)
+
+            cols = list(panel.columns)
+            pa, pb = st.columns(2)
+            a_name = pa.selectbox("Series A", cols, index=0, key="corr_a")
+            b_name = pb.selectbox("Series B", [c for c in cols if c != a_name], index=0, key="corr_b")
+            roll = rolling_correlation(panel, a_name, b_name, window=12)
+            fig_roll = go.Figure(go.Scatter(x=roll.index, y=roll.values, line=dict(color="#10B981")))
+            fig_roll.update_layout(template="plotly_dark", height=320, yaxis_range=[-1, 1],
+                                   title=f"Rolling 12-week return correlation: {a_name} vs {b_name}")
+            st.plotly_chart(fig_roll, use_container_width=True)
+
+            bands = spread_bands(panel, a_name, b_name)
+            fig_sp = go.Figure()
+            fig_sp.add_trace(go.Scatter(x=bands.index, y=bands["ratio"], name=f"{a_name} / {b_name}",
+                                        line=dict(color="#E5E7EB")))
+            for col, colour, dash in [("mean", "#10B981", "solid"), ("+1σ", "#F59E0B", "dash"),
+                                      ("-1σ", "#F59E0B", "dash"), ("+2σ", "#EF4444", "dot"),
+                                      ("-2σ", "#EF4444", "dot")]:
+                fig_sp.add_trace(go.Scatter(x=bands.index, y=bands[col], name=col,
+                                            line=dict(color=colour, dash=dash, width=1)))
+            fig_sp.update_layout(template="plotly_dark", height=360,
+                                 title="Price ratio with full-sample mean ±1σ / ±2σ bands")
+            st.plotly_chart(fig_sp, use_container_width=True)
+            st.caption("Bands use the whole selected sample, so they describe the period "
+                       "and are not a tradable signal.")
 
 # ── Footer ─────────────────────────────────────────────────────────────────────
 st.markdown("---")
