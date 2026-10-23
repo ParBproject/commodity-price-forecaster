@@ -163,7 +163,7 @@ def plot_decomposition(decomp, commodity_name: str) -> go.Figure:
     fig.update_layout(
         title=f"{commodity_name} — Seasonal Decomposition (STL)",
         template="plotly_dark",
-        height=700,
+        height=500,
         showlegend=False,
     )
     return fig
@@ -227,7 +227,7 @@ def plot_weather_overlay(
 
     fig.update_layout(
         template="plotly_dark",
-        height=580,
+        height=500,
         showlegend=True,
         title=f"{commodity_name} vs Weather — {region_name}",
     )
