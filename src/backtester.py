@@ -25,28 +25,12 @@ def walk_forward_backtest(
     step_size: int,
     horizon: int,
 ) -> dict:
-    """Run an expanding-window walk-forward backtest.
+    """Expanding-window backtest.
 
-    Parameters
-    ----------
-    series : pd.Series
-        Price series with a sorted DatetimeIndex.
-    model_fn : callable
-        ``model_fn(train) -> (forecast, lower, upper)``, each of length ``horizon``.
-    initial_train_size : int
-        Observations in the first training window.
-    step_size : int
-        Observations the origin advances between refits.
-    horizon : int
-        Steps forecast at each origin. Origins whose horizon would run past the end of
-        the series are scored on the steps that exist.
-
-    Returns
-    -------
-    dict with
-        ``predictions`` : one row per (origin, step) with actual, forecast, lower, upper
-        ``by_origin``   : MAE / RMSE / MAPE / coverage per origin
-        ``summary``     : mean MAE, mean RMSE, mean MAPE, interval hit rate, counts
+    ``model_fn(train)`` returns forecast, lower, and upper, each of length
+    ``horizon``. An origin that would run past the end of the series is scored
+    on the steps that remain. The result has ``predictions``, ``by_origin``
+    (MAE, RMSE, MAPE, coverage), and ``summary``.
     """
     s = pd.Series(series, dtype=float).dropna()
     if not s.index.is_monotonic_increasing:

@@ -29,3 +29,13 @@ env/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Local agent tooling (not part of the project)
+.cursor/
+.cursorrules
+AGENTS.md
+CLAUDE.md
+.claude/
+agent-notes/
+prompts/
+*.plan.md
