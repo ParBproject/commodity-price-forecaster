@@ -1,8 +1,4 @@
-"""
-utils.py
-========
-Chart builders and risk scoring utilities for the Commodity Price Forecaster.
-"""
+"""Plotly charts for the dashboard. Risk scores live in ``src.market``."""
 
 import numpy as np
 import pandas as pd
@@ -14,10 +10,6 @@ from typing import Optional
 from src.market import compute_risk_scores
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Forecast Chart
-# ─────────────────────────────────────────────────────────────────────────────
-
 def plot_forecast(
     historical: pd.Series,
     arima_result: Optional[dict],
@@ -27,22 +19,9 @@ def plot_forecast(
     history_weeks: int = 104,
     lstm_result: Optional[dict] = None,
 ) -> go.Figure:
-    """
-    Build an interactive Plotly chart showing historical prices plus
-    ARIMA and/or Prophet forecasts with confidence bands.
-
-    Parameters
-    ----------
-    historical : pd.Series       Full historical weekly price series.
-    arima_result : dict or None  Output of fit_best_arima().
-    prophet_result : dict or None Output of fit_prophet().
-    commodity_name : str         Display name for the chart title.
-    confidence_level : int       CI percentage (e.g. 95).
-    history_weeks : int          How many weeks of history to display.
-    """
+    """History plus whichever of ARIMA, Prophet, and LSTM returned a forecast."""
     fig = go.Figure()
 
-    # Historical prices (show last `history_weeks` for readability)
     hist = historical.iloc[-history_weeks:]
     fig.add_trace(go.Scatter(
         x=hist.index, y=hist.values,
@@ -151,16 +130,8 @@ def plot_forecast(
     return fig
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Decomposition Chart
-# ─────────────────────────────────────────────────────────────────────────────
-
 def plot_decomposition(decomp, commodity_name: str) -> go.Figure:
-    """
-    4-panel Plotly figure: Observed / Trend / Seasonal / Residual.
-
-    Works with both statsmodels seasonal_decompose and STL results.
-    """
+    """Observed, trend, seasonal, and residual. Accepts STL or seasonal_decompose output."""
     observed = pd.Series(decomp.observed).dropna()
     trend = pd.Series(decomp.trend).dropna()
     seasonal = pd.Series(decomp.seasonal).dropna()
@@ -195,26 +166,13 @@ def plot_decomposition(decomp, commodity_name: str) -> go.Figure:
     return fig
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Weather Overlay Chart
-# ─────────────────────────────────────────────────────────────────────────────
-
 def plot_weather_overlay(
     prices: pd.Series,
     weather_df: pd.DataFrame,
     commodity_name: str,
     region_name: str,
 ) -> go.Figure:
-    """
-    Dual-axis chart overlaying commodity price with temperature and precipitation.
-
-    Parameters
-    ----------
-    prices : pd.Series          Weekly commodity prices.
-    weather_df : pd.DataFrame   Weekly weather data.
-    commodity_name : str        Chart title label.
-    region_name : str           Weather region label.
-    """
+    """Price, temperature, and precipitation on shared dates. No nearest-week match."""
     fig = make_subplots(
         rows=3, cols=1,
         shared_xaxes=True,
@@ -226,7 +184,6 @@ def plot_weather_overlay(
         vertical_spacing=0.08,
     )
 
-    # Price
     fig.add_trace(go.Scatter(
         x=prices.index, y=prices.values,
         name="Price", line=dict(color="#10B981", width=2),
@@ -235,7 +192,6 @@ def plot_weather_overlay(
     # Exact dates only. method="nearest" can attach a later week to this week.
     aligned_weather = weather_df.reindex(prices.index)
 
-    # Temperature
     if "temperature_mean" in aligned_weather.columns:
         temp = aligned_weather["temperature_mean"]
         fig.add_trace(go.Scatter(
@@ -243,7 +199,6 @@ def plot_weather_overlay(
             name="Temp (°C)", line=dict(color="orange", width=1.5),
         ), row=2, col=1)
 
-    # Precipitation
     if "precipitation_sum" in aligned_weather.columns:
         precip = aligned_weather["precipitation_sum"]
         fig.add_trace(go.Bar(
@@ -261,13 +216,7 @@ def plot_weather_overlay(
 
 
 def risk_heatmap(risk_table: pd.DataFrame) -> go.Figure:
-    """
-    Plotly heatmap of risk factor scores per producing region.
-
-    Parameters
-    ----------
-    risk_table : pd.DataFrame  Output of compute_risk_scores().
-    """
+    """Heatmap of ``compute_risk_scores`` output. The geopolitical column is a prior."""
     score_cols = ["Volatility Score", "Drawdown Score",
                   "Trend Score", "Geopolitical Score", "Overall Risk Score"]
     present = [c for c in score_cols if c in risk_table.columns]

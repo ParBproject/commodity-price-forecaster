@@ -1,10 +1,4 @@
-"""
-data_loader.py
-==============
-Data retrieval for:
-  - Commodity prices via yfinance
-  - Historical weather data via Open-Meteo (free, no API key required)
-"""
+"""Yahoo Finance prices and Open-Meteo weather. No API key for either."""
 
 import logging
 from concurrent.futures import ThreadPoolExecutor
@@ -16,29 +10,13 @@ import streamlit as st
 logger = logging.getLogger(__name__)
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Commodity Prices
-# ─────────────────────────────────────────────────────────────────────────────
-
 @st.cache_data(ttl=3600, show_spinner=False)
 def fetch_commodity_prices(
     ticker: str,
     start: str,
     end: str,
 ) -> pd.Series | None:
-    """
-    Fetch commodity daily closing prices from Yahoo Finance via yfinance.
-
-    Parameters
-    ----------
-    ticker : str   Yahoo Finance ticker symbol (e.g. 'CL=F' for WTI crude).
-    start : str    Start date 'YYYY-MM-DD'.
-    end : str      End date 'YYYY-MM-DD'.
-
-    Returns
-    -------
-    pd.Series with DatetimeIndex and float prices, or None on failure.
-    """
+    """Daily closes from Yahoo Finance. ``end`` is exclusive, as in yfinance. None on failure."""
     try:
         import yfinance as yf
 
@@ -71,10 +49,6 @@ def fetch_commodity_prices(
         return None
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Weather Data (Open-Meteo)
-# ─────────────────────────────────────────────────────────────────────────────
-
 @st.cache_data(ttl=86400, show_spinner=False)
 def fetch_weather_data(
     latitude: float,
@@ -83,26 +57,9 @@ def fetch_weather_data(
     end_date: str,
     variables: list[str] | None = None,
 ) -> pd.DataFrame | None:
-    """
-    Fetch historical daily weather data from the Open-Meteo API.
-    No API key required. Free up to 10,000 calls/day.
+    """Daily Open-Meteo history, resampled to weeks. None if the request fails.
 
-    API documentation: https://open-meteo.com/en/docs/historical-weather-api
-
-    Parameters
-    ----------
-    latitude : float   Latitude of the region centre.
-    longitude : float  Longitude of the region centre.
-    start_date : str   'YYYY-MM-DD'.
-    end_date : str     'YYYY-MM-DD'.
-    variables : list[str], optional
-        Open-Meteo variable names. Defaults to temperature_2m_mean,
-        precipitation_sum, windspeed_10m_max, et0_fao_evapotranspiration.
-
-    Returns
-    -------
-    pd.DataFrame with DatetimeIndex and one column per weather variable.
-    Returns None on connection failure.
+    https://open-meteo.com/en/docs/historical-weather-api
     """
     if variables is None:
         variables = [
@@ -156,7 +113,6 @@ def fetch_weather_data(
 
 
 def _clean_col_name(col: str) -> str:
-    """Simplify Open-Meteo column names."""
     mapping = {
         "temperature_2m_mean": "temperature_mean",
         "precipitation_sum": "precipitation_sum",
@@ -172,19 +128,7 @@ def simulate_weather_data(
     freq: str = "W",
     seed: int = 42,
 ) -> pd.DataFrame:
-    """
-    Generate synthetic weather data for offline testing / demo mode.
-
-    Parameters
-    ----------
-    start, end : str   Date range strings.
-    freq : str         Pandas frequency (default 'W' for weekly).
-
-    Returns
-    -------
-    pd.DataFrame with columns: temperature_mean, precipitation_sum,
-    windspeed_max, evapotranspiration.
-    """
+    """Seeded synthetic weather. Not a stand-in for Open-Meteo in any reported result."""
     from src.market import simulate_weather_data as _simulate_weather_data
 
     return _simulate_weather_data(start, end, freq=freq, seed=seed)

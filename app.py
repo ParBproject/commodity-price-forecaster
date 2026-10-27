@@ -1,11 +1,7 @@
-"""
-Commodity Price Forecaster
-==========================
-Interactive Streamlit dashboard for forecasting commodity prices using
-ARIMA and Prophet, with weather data overlays, confidence intervals,
-and supplier/producer risk scoring.
+"""Streamlit dashboard for commodity futures forecasts.
 
-⚠️ DISCLAIMER: For educational/simulation purposes only. Not financial advice.
+ARIMA, Prophet, and an LSTM, with baseline validation, a weather chart,
+and a producer table. Educational only; not financial advice.
 """
 
 import logging
@@ -20,7 +16,6 @@ import warnings
 warnings.filterwarnings("ignore")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 
-# ── Page config ────────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Commodity Price Forecaster",
     page_icon="🛢️",
@@ -99,7 +94,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ── Module imports ─────────────────────────────────────────────────────────────
 from src.data_loader import (
     fetch_commodity_prices,
     fetch_weather_data,
@@ -137,14 +131,11 @@ from src.utils import (
     compute_risk_scores,
 )
 
-# ═══════════════════════════════════════════════════════════════════════════════
-#  SIDEBAR
-# ═══════════════════════════════════════════════════════════════════════════════
+# Sidebar
 with st.sidebar:
     st.markdown("## 🛢️ Commodity Forecaster")
     st.markdown("---")
 
-    # Commodity selection
     from src.market import COMMODITIES
 
     commodity_name = st.selectbox("Select Commodity", list(COMMODITIES.keys()))
@@ -168,7 +159,6 @@ with st.sidebar:
         end_date = st.date_input("End Date",
                                  value=pd.Timestamp("2024-12-31"))
 
-    # Forecast settings
     st.markdown("---")
     st.subheader("🔮 Forecast Settings")
 
@@ -177,7 +167,6 @@ with st.sidebar:
     forecast_horizon = st.slider("Forecast Horizon (weeks)", 4, 52, 12)
     confidence = st.slider("Confidence Interval (%)", 80, 99, 95)
 
-    # Weather integration
     st.markdown("---")
     st.subheader("🌤️ Weather Integration")
     weather_enabled = st.checkbox("Include Weather Data", value=True)
@@ -199,7 +188,6 @@ with st.sidebar:
         usda_enabled = st.checkbox("Include USDA Data", value=True,
                                    help="NASS Quick Stats national yield estimates")
 
-    # Scenario adjustment
     st.markdown("---")
     st.subheader("⚡ Scenario Adjustments")
     weather_multiplier = st.slider(
@@ -215,9 +203,7 @@ with st.sidebar:
     if st.sidebar.button("🔄 Clear Data Cache"):
        st.cache_data.clear()
        st.rerun()
-# ═══════════════════════════════════════════════════════════════════════════════
-#  HEADER
-# ═══════════════════════════════════════════════════════════════════════════════
+# Header
 st.markdown(
     f"""
     <div class="commodity-hero">
@@ -262,9 +248,7 @@ tabs = st.tabs([
     "Correlations",
 ])
 
-# ═══════════════════════════════════════════════════════════════════════════════
-#  DATA LOADING & CACHING
-# ═══════════════════════════════════════════════════════════════════════════════
+# Data
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def load_all_data(ticker, start, end, lat, lon, include_weather):
@@ -297,7 +281,6 @@ if not run_btn:
         """)
     st.stop()
 
-# ── Load data ─────────────────────────────────────────────────────────────────
 with st.spinner(f"Loading {commodity_name} data…"):
     prices, weather_df = load_all_data(
         commodity_ticker, start_date, end_date,
@@ -313,13 +296,10 @@ if prices is None or prices.empty:
 weekly = weekly_last(prices)
 returns = weekly.pct_change().dropna()
 
-# ═══════════════════════════════════════════════════════════════════════════════
-#  TAB 0 — OVERVIEW
-# ═══════════════════════════════════════════════════════════════════════════════
+# Overview
 with tabs[0]:
     st.subheader(f"📋 {commodity_name} Price History")
 
-    # KPI row
     current_price = prices.iloc[-1]
     start_price = prices.iloc[0]
     total_return = (current_price / start_price - 1) * 100
@@ -335,7 +315,6 @@ with tabs[0]:
     c4.metric(high_label, f"${trailing['high']:.2f}")
     c5.metric(low_label, f"${trailing['low']:.2f}")
 
-    # Main price chart with volume
     fig_main = make_subplots(rows=2, cols=1, shared_xaxes=True,
                               row_heights=[0.75, 0.25],
                               subplot_titles=[f"{commodity_name} Price ($)",
@@ -346,7 +325,6 @@ with tabs[0]:
                    fill="tozeroy", fillcolor="rgba(16,185,129,0.1)"),
         row=1, col=1,
     )
-    # Returns bar chart
     colors = ["green" if r >= 0 else "red" for r in returns.values]
     fig_main.add_trace(
         go.Bar(x=returns.index, y=returns.values * 100, name="Returns",
@@ -357,7 +335,6 @@ with tabs[0]:
                             showlegend=False)
     st.plotly_chart(fig_main, use_container_width=True)
 
-    # Stats table
     st.subheader("📊 Descriptive Statistics")
     stats = {
         "Statistic": ["Mean Price", "Median Price", "Std Dev", "Skewness",
@@ -376,9 +353,7 @@ with tabs[0]:
     st.dataframe(pd.DataFrame(stats), use_container_width=True,
                  hide_index=True)
 
-# ═══════════════════════════════════════════════════════════════════════════════
-#  TAB 1 — FORECAST
-# ═══════════════════════════════════════════════════════════════════════════════
+# Forecast
 with tabs[1]:
     st.subheader(f"🔮 {forecast_horizon}-Week Price Forecast")
 
@@ -485,14 +460,12 @@ with tabs[1]:
 
     st.markdown("---")
 
-    # Forecast chart
     fig_fc = plot_forecast(
         weekly, display_arima, display_prophet, commodity_name,
         confidence_level=confidence, lstm_result=display_lstm,
     )
     st.plotly_chart(fig_fc, use_container_width=True)
 
-    # Scenario annotation
     if scenario_multiplier != 1.0:
         st.info(
             f"⚡ Scenario applied to the forecast path only "
@@ -503,7 +476,6 @@ with tabs[1]:
             f"Net price adjustment: **{(scenario_multiplier - 1)*100:+.1f}%**"
         )
 
-    # Forecast table
     st.subheader("📋 Forecast Values Table")
     fc_df = forecast_export_frame(display_arima, display_prophet, confidence, display_lstm)
     if fc_df is not None:
@@ -519,9 +491,7 @@ with tabs[1]:
             mime="text/csv",
         )
 
-# ═══════════════════════════════════════════════════════════════════════════════
-#  TAB 2 — FORECAST VALIDATION
-# ═══════════════════════════════════════════════════════════════════════════════
+# Forecast Validation
 with tabs[2]:
     st.subheader("Rolling-Origin Baseline Validation")
     st.caption(
@@ -653,9 +623,7 @@ with tabs[2]:
             st.warning(f"Validation unavailable: {exc}")
 
 
-# ═══════════════════════════════════════════════════════════════════════════════
-#  TAB 3 — WEATHER OVERLAY
-# ═══════════════════════════════════════════════════════════════════════════════
+# Weather Overlay
 with tabs[3]:
     st.subheader(f"🌤️ Weather Overlay — {weather_region}")
 
@@ -726,9 +694,7 @@ with tabs[3]:
                    f"{usda_cache['downloaded_on']} (data/usda_cache.json). Report dates "
                    "are approximated as the 12th of the release month.")
 
-# ═══════════════════════════════════════════════════════════════════════════════
-#  TAB 3 — DECOMPOSITION
-# ═══════════════════════════════════════════════════════════════════════════════
+# Decomposition
 with tabs[4]:
     st.subheader("🔬 Time-Series Decomposition")
     st.caption("Seasonal-Trend Decomposition using LOESS (STL)")
@@ -761,9 +727,7 @@ with tabs[4]:
         st.warning("Decomposition requires at least 2 full seasonal periods "
                    "(104 weeks for annual seasonality).")
 
-# ═══════════════════════════════════════════════════════════════════════════════
-#  TAB 4 — RISK DASHBOARD
-# ═══════════════════════════════════════════════════════════════════════════════
+# Risk Dashboard
 with tabs[5]:
     st.subheader("⚠️ Producer & Supplier Risk Dashboard")
     st.caption(
@@ -773,7 +737,6 @@ with tabs[5]:
         "estimated country risk. **Not a credit rating.**"
     )
 
-    # Compute risk scores
     risk_table = compute_risk_scores(prices, commodity_name)
 
     col_left, col_right = st.columns([3, 2])
@@ -793,7 +756,6 @@ with tabs[5]:
             height=360,
         )
 
-    # Volatility rolling chart
     st.markdown("---")
     rolling_vol = returns.rolling(12).std() * np.sqrt(52) * 100
     fig_vol = go.Figure()
@@ -810,7 +772,6 @@ with tabs[5]:
     )
     st.plotly_chart(fig_vol, use_container_width=True)
 
-    # Risk explanation
     with st.expander("ℹ️ How risk scores are calculated"):
         st.markdown("""
         | Component | Weight | Description |
@@ -824,9 +785,7 @@ with tabs[5]:
         """)
 
 
-# ═══════════════════════════════════════════════════════════════════════════════
-#  TAB 6 — WALK-FORWARD BACKTEST
-# ═══════════════════════════════════════════════════════════════════════════════
+# Walk-Forward Backtest
 with tabs[6]:
     st.subheader("🔁 Walk-forward backtest: ARIMA(1,1,1)")
     st.caption(
@@ -892,9 +851,7 @@ with tabs[6]:
         )
 
 
-# ═══════════════════════════════════════════════════════════════════════════════
-#  TAB 7 — CROSS-COMMODITY CORRELATIONS
-# ═══════════════════════════════════════════════════════════════════════════════
+# Cross-Commodity Correlations
 with tabs[7]:
     st.subheader("🔗 Cross-commodity correlations")
     if not compare_names:
@@ -953,7 +910,6 @@ with tabs[7]:
             st.caption("Bands use the whole selected sample, so they describe the period "
                        "and are not a tradable signal.")
 
-# ── Footer ─────────────────────────────────────────────────────────────────────
 st.markdown("---")
 st.caption(
     "⚠️ **Disclaimer**: Forecasts and risk scores are for educational and "

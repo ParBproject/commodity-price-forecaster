@@ -1,12 +1,4 @@
-"""
-forecaster.py
-=============
-Time-series forecasting pipeline:
-  - Auto-ARIMA via pmdarima (falls back to statsmodels ARIMA)
-  - Prophet (Facebook/Meta) with uncertainty intervals
-  - STL seasonal decomposition
-  - Forecast accuracy metrics (MAE, RMSE, MAPE)
-"""
+"""ARIMA and Prophet forecasts, STL decomposition, and holdout error metrics."""
 
 from __future__ import annotations
 
@@ -190,10 +182,6 @@ def forecast_with_fixed_arima(
     }
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Auto-ARIMA
-# ─────────────────────────────────────────────────────────────────────────────
-
 def fit_best_arima(
     series: pd.Series,
     horizon: int = 12,
@@ -201,30 +189,13 @@ def fit_best_arima(
     seasonal: bool = True,
     m: int = 52,          # Weekly seasonality period (52 weeks = 1 year)
 ) -> dict | None:
-    """
-    Fit an ARIMA model with pmdarima's auto_arima, then forecast `horizon`
-    steps ahead. Seasonal terms are used only when the training sample is
-    long enough. No exogenous regressors are passed.
+    """Auto-ARIMA via pmdarima, or ARIMA(1, 1, 1) if that import or fit fails.
 
-    Falls back to statsmodels ARIMA(1, 1, 1) when pmdarima is missing or
-    auto-selection fails. Returns None when the history is too short or both
-    fits fail. The returned ``selection`` key is ``"auto"`` or ``"fixed"``.
-
-    Parameters
-    ----------
-    series : pd.Series     Weekly commodity prices with DatetimeIndex.
-    horizon : int          Forecast steps (weeks).
-    alpha : float          Significance level for confidence intervals (0.05 = 95%).
-    seasonal : bool        Whether to include seasonal component.
-    m : int                Seasonal period in weeks.
-
-    Returns
-    -------
-    dict with keys:
-        forecast_df : pd.DataFrame (index=future dates, columns=forecast/lower/upper)
-        metrics     : dict (MAE, RMSE, MAPE, AIC)
-        model       : fitted model object
-        order       : (p,d,q) or (p,d,q)(P,D,Q)m tuple
+    Seasonal terms are used only when the training sample is longer than
+    ``2 * m``. No exogenous regressors. Holdout errors come from the training
+    fit; ``update`` refits the forward path and does not change those errors.
+    ``selection`` is ``"auto"`` or ``"fixed"``. None if the series is too short
+    or both fits fail.
     """
     try:
         prepared = _prepare_price_series(series)
@@ -291,10 +262,6 @@ def fit_best_arima(
         return {**fallback, "selection": "fixed"}
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Prophet
-# ─────────────────────────────────────────────────────────────────────────────
-
 def select_prophet_components(forecast: pd.DataFrame) -> pd.DataFrame:
     """Return Prophet components that are present in a forecast frame.
 
@@ -319,18 +286,10 @@ def fit_prophet(
     weekly_seasonality: bool = True,
     yearly_seasonality: bool = True,
 ) -> dict | None:
-    """
-    Fit a Prophet model and forecast `horizon` weeks ahead.
+    """Prophet forecast. None if Prophet is not installed or the fit fails.
 
-    Parameters
-    ----------
-    series : pd.Series     Weekly prices with DatetimeIndex.
-    horizon : int          Forecast horizon (weeks).
-    interval_width : float Confidence interval width (e.g. 0.95).
-
-    Returns
-    -------
-    dict with keys: forecast_df, metrics, model
+    Holdout errors use the training fit, scored on the actual holdout dates.
+    The returned path is a second fit on the full sample.
     """
     try:
         from prophet import Prophet
@@ -406,26 +365,11 @@ def fit_prophet(
     }
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Accuracy Metrics
-# ─────────────────────────────────────────────────────────────────────────────
-
 def compute_metrics(
     actual: np.ndarray,
     predicted: np.ndarray,
 ) -> dict:
-    """
-    Compute forecast accuracy metrics.
-
-    Parameters
-    ----------
-    actual : np.ndarray    Ground-truth values.
-    predicted : np.ndarray Forecasted values.
-
-    Returns
-    -------
-    dict with MAE, RMSE, MAPE keys.
-    """
+    """MAE, RMSE, and MAPE. MAPE is None when every actual value is zero."""
     actual = np.asarray(actual, dtype=float).flatten()
     predicted = np.asarray(predicted, dtype=float).flatten()
 
@@ -453,28 +397,12 @@ def compute_metrics(
     }
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Seasonal Decomposition
-# ─────────────────────────────────────────────────────────────────────────────
-
 def decompose_series(
     series: pd.Series,
     model_type: str = "additive",
     period: int = 52,
 ) -> object | None:
-    """
-    STL seasonal decomposition of a time series.
-
-    Parameters
-    ----------
-    series : pd.Series   Weekly price series.
-    model_type : str     'additive' or 'multiplicative'.
-    period : int         Seasonal period (52 for annual weekly).
-
-    Returns
-    -------
-    statsmodels DecomposeResult or None if insufficient data.
-    """
+    """STL decomposition, or classical decomposition if STL fails. None if the series is shorter than two periods."""
     if len(series) < 2 * period:
         return None
 
@@ -523,31 +451,17 @@ def decomposition_strength(result: object) -> dict:
     }
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Feature Engineering
-# ─────────────────────────────────────────────────────────────────────────────
-
 def create_features(
     series: pd.Series,
     lags: list[int] | None = None,
     weather_df: pd.DataFrame | None = None,
 ) -> pd.DataFrame:
-    """
-    Engineer features for a supervised forecast of ``price`` at time t.
+    """Columns for a supervised model of ``price`` at t.
 
-    ``price`` and ``log_price`` are the observation at t. Every other column
-    uses only information available before t: lags, completed returns, rolling
-    statistics through t-1, calendar fields, and weather lagged by one period.
-
-    Parameters
-    ----------
-    series : pd.Series      Weekly prices.
-    lags : list[int]        Lag periods to include (default [1, 2, 4, 8, 52]).
-    weather_df : pd.DataFrame, optional  Weather features aligned to same index.
-
-    Returns
-    -------
-    pd.DataFrame of engineered features.
+    ``price`` and ``log_price`` are the observation at t. Lags, returns,
+    rolling stats, and weather use only information from before t. Weather is
+    shifted by one week on the calendar, not by row position. The fitted
+    models in the app do not call this.
     """
     if lags is None:
         lags = [1, 2, 4, 8, 52]
