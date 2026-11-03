@@ -9,12 +9,19 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        python-version: ["3.10", "3.12"]
+        # PEP 604 unions (for example pd.Series | None) need Python 3.10.
+        # pandas==2.2.3 is classified through 3.12, so that is the ceiling.
+        python-version: ["3.10", "3.11", "3.12"]
 
     steps:
       - name: Check out repository
@@ -24,12 +31,23 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
 
-      - name: Install pinned test dependencies
+      - name: Install pinned dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install numpy==2.2.6 pandas==2.2.3 scipy==1.15.3 statsmodels==0.14.5 pytest==8.3.5 ruff==0.11.12 streamlit==1.55.0 yfinance==0.2.66
+          # CPU wheel. The version matches requirements.txt; this index
+          # avoids the default CUDA wheel.
           python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+          # Pins come from the requirements files. Prophet, pmdarima, and
+          # plotly stay uninstalled so the suite still covers those fallbacks.
+          python -m pip install \
+            -c requirements.txt \
+            -r requirements-dev.txt \
+            numpy pandas scipy statsmodels streamlit yfinance
 
       - name: Lint critical errors
         run: ruff check app.py src tests scripts --select E9,F63,F7,F82

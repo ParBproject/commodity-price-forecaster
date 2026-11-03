@@ -108,7 +108,12 @@ from src.forecaster import (
     forecast_export_frame,
 )
 from src.formatting import format_directional_accuracy, format_mape
-from src.market import trailing_high_low, weekly_last, weather_price_frame
+from src.market import (
+    compute_risk_scores,
+    trailing_high_low,
+    weekly_last,
+    weather_price_frame,
+)
 from src.validation import rolling_origin_baseline_backtest
 from src.backtester import arima_model_fn, walk_forward_backtest
 from src.correlation import (
@@ -128,7 +133,6 @@ from src.utils import (
     plot_decomposition,
     plot_weather_overlay,
     risk_heatmap,
-    compute_risk_scores,
 )
 
 # Sidebar

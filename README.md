@@ -4,7 +4,7 @@ Weekly forecasts for energy, metals, and grain futures. Prices are Yahoo Finance
 
 [Live demo](https://parbproject.github.io/commodity-price-forecaster/) reads `results/leaderboard.json`. The `gh-pages` branch is built from `site/` plus that file.
 
-[![CI](https://github.com/ParBproject/commodity-price-forecaster/actions/workflows/python-package-conda.yml/badge.svg)](https://github.com/ParBproject/commodity-price-forecaster/actions/workflows/python-package-conda.yml)
+[![CI](https://github.com/ParBproject/commodity-price-forecaster/actions/workflows/ci.yml/badge.svg)](https://github.com/ParBproject/commodity-price-forecaster/actions/workflows/ci.yml)
 
 ## Results
 
@@ -151,7 +151,7 @@ Method notes are in [FORECASTING_METHODOLOGY.md](FORECASTING_METHODOLOGY.md).
 
 ## Tests and CI
 
-GitHub Actions lints, compiles, and runs pytest on Python 3.10 and 3.12. The suite checks metric edge cases, the rolling-origin chronology, that each score uses only its training prefix, the trailing 52-week high and low, lagged weather in `create_features`, Hyndman seasonal and trend strength, and the ARIMA holdout being scored before the full-sample refit. It also pins the leaderboard headline numbers, recomputes the baselines and ARIMA from the snapshot, recomputes Prophet for WTI when Prophet is installed, and checks that the Results block above matches `results/leaderboard.json`. Calibration coverage for WTI and the wheat USDA variant are recomputed the same way.
+GitHub Actions lints, compiles, and runs pytest on Python 3.10, 3.11, and 3.12. The suite checks metric edge cases, the rolling-origin chronology, that each score uses only its training prefix, the trailing 52-week high and low, lagged weather in `create_features`, Hyndman seasonal and trend strength, and the ARIMA holdout being scored before the full-sample refit. It also pins the leaderboard headline numbers, recomputes the baselines and ARIMA from the snapshot, recomputes Prophet for WTI when Prophet is installed, and checks that the Results block above matches `results/leaderboard.json`. Calibration coverage for WTI and the wheat USDA variant are recomputed the same way.
 
 ## Limits
 
